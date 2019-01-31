@@ -1,0 +1,11 @@
+.login {
+
+  &__content {
+    &__left {
+      background: url('/images/twitter.png') no-repeat center center / cover;
+    }
+    &__right {
+      padding: 10rem;
+    }
+  }
+}
