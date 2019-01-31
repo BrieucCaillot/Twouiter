@@ -18,6 +18,10 @@ $secondary: #10171e;
   background-color: $secondary
 }
 
+.over-hide {
+  overflow: hidden;
+}
+
 .full-w {
   width: 100%;
 }
@@ -63,6 +67,18 @@ $secondary: #10171e;
   }
 }
 
+main.login {
+  height: calc(100vh - 52px);
+  margin-top: 64px;
+}
+
 .label {
   font-weight: normal;
+}
+
+.button {
+  border-radius: 50px;
+  border: none;
+  padding: 20px 40px;
+  line-height: 0px;
 }

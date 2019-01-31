@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return 'Nique ta mère';
+//        return view('home');
     }
 }

@@ -13,11 +13,13 @@
 
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-//    return view('welcome');
-    return View::make('auth/login');
+Route::middleware('web')->group(function() {
+    Auth::routes();
 });
 
-Auth::routes();
+Route::middleware('auth')->group(function() {
+    Route::get('/', function() {
+       return 'Ok connected';
+    });
+});
 
-Route::get('/home', 'HomeController@index')->name('home');

@@ -131,6 +131,8 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'name.required' => 'Mon bro donnes un nom stp',
+        'username.required' => 'Abuses pas parcontre bro, plus que :min le username stp'
     ],
 
     /*

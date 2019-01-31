@@ -2,10 +2,12 @@
 
   &__content {
     &__left {
-      background: url('/images/twitter.png') no-repeat center center / cover;
+      background: url('/images/twitter.png') no-repeat center center / contain;
     }
     &__right {
-      padding: 10rem;
+      padding: 8% 10%;
+      overflow: scroll;
+      height: 100%;
     }
   }
 }
