@@ -7,7 +7,7 @@
                         <img src="images/twitter.png">
                     </a>
 
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                    <a href="/" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
@@ -15,12 +15,6 @@
                 </div>
 
                 <div id="navbarBasicExample" class="navbar-menu">
-                    <div class="navbar-start">
-                        <a href="/home" class="navbar-item">
-                            Home
-                        </a>
-                    </div>
-
                     <div class="navbar-end">
                         <div class="navbar-item">
                             <div class="buttons">
@@ -28,7 +22,7 @@
                                     Sign up
                                 </a>
                                 <a href="/login" class="button is-light">
-                                    Log in
+                                    Sign in
                                 </a>
                             </div>
                         </div>
@@ -42,6 +36,8 @@
 <script>
     export default {
     	name: 'Header',
+        props: ['user'],
+
         mounted() {
             console.log('Component mounted.')
         }

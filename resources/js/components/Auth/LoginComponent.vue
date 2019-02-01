@@ -1,5 +1,5 @@
 <template>
-    <main class="login background-color-secondary">
+    <main id="content" class="login background-color-secondary">
         <div class="login__content columns full-h">
             <div class="login__content__left column is-6"></div>
             <div class="column is-6 background-color-primary">
@@ -32,8 +32,7 @@
                             </div>
                         </div>
                         <div class="level">
-                            <button class="button background-color-secondary has-text-white" type="submit">Connect
-                            </button>
+                            <button class="button background-color-secondary has-text-white" type="submit">Connect</button>
                         </div>
                     </form>
                 </div>
@@ -65,7 +64,7 @@
 					.catch((error) => {
 						this.errors.username = error.response.data.errors.username
 						this.errors.password = error.response.data.errors.password
-                    })
+					})
 			}
 		},
 		mounted() {

@@ -1,5 +1,5 @@
 <template>
-    <main class="login background-color-secondary">
+    <main id="content" class="login background-color-secondary">
         <div class="login__content columns full-h">
             <div class="login__content__left column is-6"></div>
             <div class="column is-6 background-color-primary">
@@ -76,10 +76,10 @@
 		name: 'Register',
 		data() {
 			return {
-				name: 'Brieuc',
-				username: 'Brieuc',
-				email: 'bibimario@gmail.com',
-				password: 'bibi',
+				name: '',
+				username: '',
+				email: '',
+				password: '',
 				password_confirmation: '',
 				errors: {
 					username: '',
@@ -97,9 +97,7 @@
 					password: this.password,
 					password_confirmation: this.password_confirmation,
 				})
-					.then((response) => {
-						console.log(response)
-                    })
+					.then((response) => (response.status == 200) ? location.reload() : null)
 					.catch((error) => {
 						this.errors.username = error.response.data.errors.username
 						this.errors.email = error.response.data.errors.email

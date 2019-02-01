@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
+.login {
+  height: calc(100vh - 52px);
+}
+
 .login__content__left {
   background: url("/images/twitter.png") no-repeat center center/contain;
 }
@@ -11699,8 +11703,7 @@ body {
   padding-right: 100px;
 }
 
-main.login {
-  height: calc(100vh - 52px);
+main#content {
   margin-top: 64px;
 }
 

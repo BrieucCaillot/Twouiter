@@ -18,8 +18,8 @@ Route::middleware('web')->group(function() {
 });
 
 Route::middleware('auth')->group(function() {
-    Route::get('/', function() {
-       return 'Ok connected';
-    });
+    Route::get('/', 'PostController@index');
+    Route::get('/api/posts', 'ApiController@all');
+    Route::post('/post', 'PostController@store');
 });
 
