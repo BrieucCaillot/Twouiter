@@ -1,19 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
-.login {
-  height: calc(100vh - 52px);
-}
-
-.login__content__left {
-  background: url("/images/twitter.png") no-repeat center center/contain;
-}
-
-.login__content__right {
-  padding: 8% 10%;
-  overflow: scroll;
-  height: 100%;
-}
-
 /*! bulma.io v0.7.2 | MIT License | github.com/jgthms/bulma */
 
 @-webkit-keyframes spinAround {
@@ -11186,6 +11172,83 @@ label.panel-block:hover {
   padding: 3rem 1.5rem 6rem;
 }
 
+.login {
+  height: calc(100vh - 52px);
+}
+
+.login__content__left {
+  background: url("/images/twitter.png") no-repeat center center/contain;
+}
+
+.login__content__right {
+  padding: 8% 10%;
+  overflow: scroll;
+  height: 100%;
+}
+
+.posts__center {
+  margin-top: 20px;
+}
+
+@media screen and (min-width: 1088px) {
+  .posts__center {
+    margin: 0 30px;
+  }
+}
+
+.posts__user {
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.posts__user__left {
+  flex: none;
+}
+
+.posts__user__left__img {
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+}
+
+.posts__user__right__top {
+  margin-bottom: 3px !important;
+}
+
+.posts__newpost {
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.posts__post {
+  border-radius: 8px;
+}
+
+.posts__post__left {
+  flex: none;
+}
+
+.posts__post__left__img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.posts__post__right__top {
+  margin-bottom: 10px !important;
+}
+
+.posts__post__right__name {
+  word-break: break-all;
+  color: #14171a;
+  font-weight: bold;
+  padding-right: 7px;
+}
+
+.posts__post__right__username {
+  color: grey;
+}
+
 html,
 body {
   height: 100%;
@@ -11704,7 +11767,13 @@ body {
 }
 
 main#content {
-  margin-top: 64px;
+  padding-top: 120px;
+}
+
+@media screen and (max-width: 1088px) {
+  main#content {
+    padding: 120px 30px 30px 30px;
+  }
 }
 
 .label {

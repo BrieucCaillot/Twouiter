@@ -68,7 +68,10 @@ $secondary: #10171e;
 }
 
 main#content {
-  margin-top: 64px;
+  padding-top: 120px;
+  @media screen and (max-width: 1088px) {
+    padding: 120px 30px 30px 30px;
+  }
 }
 
 .label {

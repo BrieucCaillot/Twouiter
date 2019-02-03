@@ -51,19 +51,17 @@
                         </div>
                     @else
                         <div class="navbar-item">
-                            <div class="buttons">
-                                <a href="#">
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <a class="button background-color-primary has-text-white"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                      style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
+                            <a class="has-text-white pd-r2" href="#">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <a class="button background-color-primary has-text-white"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                  style="display: none;">
+                                @csrf
+                            </form>
                         </div>
                     @endguest
 
