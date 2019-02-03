@@ -1,38 +1,53 @@
 <template>
-    <main id="content" class="posts background-color-primary">
+    <main id="content" class="user posts background-color-primary has-text-white">
         <div class="container is-fluid">
-            <div class="columns is-multiline">
-                <div class="column is-3 is-12-touch">
-                    <div class="columns is-vcentered posts__user is-flex background-color-secondary">
-                        <div class="posts__user__left column ">
-                            <div class="posts__user__left__img"
+            <div class="columns">
+                <div class="column user__profile is-3 is-12-touch background-color-secondary">
+                    <div class="columns mg-t1">
+                        <div class="column user__profile__top">
+                            <div class="user__profile__top__img"
                                  style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
                         </div>
-                        <div class="posts__user__right column has-text-white">
-                            <div class="level posts__user__right__top">
-                                <a :href="/user/ + user.username"><strong class="is-size-5 has-text-white">{{ user.name }}</strong></a>
+                    </div>
+                    <div class="columns is-vcentered is-flex">
+                        <div class="user__right column">
+                            <div class="level is-mobile user__profile__username">
+                                <a class="has-text-white full-w has-text-centered is-size-4"
+                                   :href="/user/ + user.username">
+                                    <strong>{{ user.name }}</strong>
+                                </a>
+                            </div>
+                            <div class="level has-text-centered">
+                                <p class="full-w has-text-center">@{{ user.username }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="level">
+                                <span>Tweets</span>
+                                <span>xx</span>
                             </div>
                             <div class="level">
-                                <p>@{{ user.username }}</p>
+                                <span>Abonnements</span>
+                                <span>xx</span>
+                            </div>
+                            <div class="level">
+                                <span>Abonnés</span>
+                                <span>xx</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
-                    <div class="posts__newpost columns background-color-secondary has-text-white">
+                    <div class="columns">
                         <div class="column">
-                            <form @submit.prevent="newTweet()" method="POST">
-                                <div class="level">
-                                    <h1 class="is-size-4">Quoi de neuf ?</h1>
+                            <div class="level">
+                                <div class="level-left">
+                                    <h1 class="color-secondary is-size-4 has-text-white">Latests tweets</h1>
                                 </div>
-                                <div class="level">
-                                    <input class="input" type="text" v-model="message" placeholder="Quoi de neuf ?">
-                                </div>
-                                <div class="level">
-                                    <button class="button background-color-primary has-text-white" type="submit">Tweeter
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                     <div class="columns">
@@ -48,7 +63,7 @@
                                             <a :href="/user/ + user.username">
                                                 <strong class="posts__post__right__name">{{ user.name }}</strong>
                                             </a>
-                                            <span class="posts__post__right__username">@{{ post.user.username }}</span>
+                                            <span class="posts__post__right__username">@{{ user.username }}</span>
                                         </div>
                                         <div class="level-right">
                                             <span class="posts__post__right__date is-size-7">{{ post.human_date }}</span>
@@ -69,56 +84,31 @@
 
 <script>
 	export default {
-		name: "Posts",
+		name: "UserComponent",
 		data() {
 			return {
-				message: '',
 				user: '',
 				posts: ''
 			}
 		},
 		methods: {
-			getPosts() {
-				axios.get('/api/allposts')
-					.then((response) => {
-						console.log(response);
-						this.posts = response.data.data
-					})
-					.catch((error) => console.log(error))
-			},
 			getUser() {
 				axios.get('/api/user')
+					.then((response) => this.user = response.data)
+					.catch((error) => console.log(error))
+			},
+			getPosts() {
+				axios.get('/api/posts')
 					.then((response) => {
 						console.log(response);
-						this.user = response.data
+						this.posts = response.data
 					})
 					.catch((error) => console.log(error))
 			},
-			newTweet() {
-				if (this.message.length > 0) {
-					axios.post('/post', {
-						message: this.message
-					})
-						.then((response) => {
-							console.log(response)
-							if (response.status == 200) this.getPosts();
-						})
-						.catch((error) => {
-							console.log(error);
-							return;
-							this.errors.username = error.response.data.errors.username
-							this.errors.password = error.response.data.errors.password
-						})
-				}
-			}
 		},
-		beforeMount() {
-			this.getUser()
-			this.getPosts()
+		mounted() {
+			this.getUser();
+			this.getPosts();
 		}
 	}
 </script>
-
-<style scoped>
-
-</style>

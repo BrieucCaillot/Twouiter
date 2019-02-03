@@ -1,4 +1,9 @@
 .posts {
+  padding-top: 80px;
+  @media screen and (max-width: 1088px) {
+    padding: 120px 30px 30px 30px;
+  }
+
   &__center {
     margin-top: 20px;
     @media screen and (min-width: 1088px) {
@@ -29,7 +34,7 @@
 
   &__newpost {
     border-radius: 8px;
-    padding: 20px;
+    padding: 15px;
   }
 
   &__post {
@@ -58,6 +63,10 @@
       }
 
       &__username {
+        color: grey;
+      }
+
+      &__date {
         color: grey;
       }
 

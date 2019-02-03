@@ -51,7 +51,6 @@ $secondary: #10171e;
     margin-right: 10px*$i;
   }
 
-
   /*////////PADDING////////*/
   .pd-b#{$i} {
     padding-bottom: 10px*$i;
@@ -68,10 +67,8 @@ $secondary: #10171e;
 }
 
 main#content {
-  padding-top: 120px;
-  @media screen and (max-width: 1088px) {
-    padding: 120px 30px 30px 30px;
-  }
+  min-height: 100vh;
+  margin-top: 56px;
 }
 
 .label {

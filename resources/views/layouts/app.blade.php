@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,11 +18,11 @@
 </head>
 <body>
 <header class="over-hide">
-    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-fixed-top background-color-secondary" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a href="/" class="navbar-item">
-                    <img src="images/twitter.png">
+                    <img src="/images/twitter.png">
                 </a>
 
                 <a href="/" role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
@@ -51,7 +51,7 @@
                         </div>
                     @else
                         <div class="navbar-item">
-                            <a class="has-text-white pd-r2" href="#">
+                            <a href="/user/{{ Auth::user()->username }}" class="has-text-white pd-r2" href="#">
                                 {{ Auth::user()->name }}
                             </a>
                             <a class="button background-color-primary has-text-white"

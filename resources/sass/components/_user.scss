@@ -1,0 +1,18 @@
+.user {
+  &__profile {
+    border-radius: 8px;
+    &__top {
+      height: 170px;
+      margin: 0 auto;
+      max-width: 170px;
+      &__img {
+        height: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    &__username {
+      margin-bottom: 3px !important;
+    }
+  }
+}

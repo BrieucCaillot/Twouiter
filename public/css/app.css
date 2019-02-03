@@ -11186,6 +11186,16 @@ label.panel-block:hover {
   height: 100%;
 }
 
+.posts {
+  padding-top: 80px;
+}
+
+@media screen and (max-width: 1088px) {
+  .posts {
+    padding: 120px 30px 30px 30px;
+  }
+}
+
 .posts__center {
   margin-top: 20px;
 }
@@ -11217,7 +11227,7 @@ label.panel-block:hover {
 
 .posts__newpost {
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px;
 }
 
 .posts__post {
@@ -11247,6 +11257,29 @@ label.panel-block:hover {
 
 .posts__post__right__username {
   color: grey;
+}
+
+.posts__post__right__date {
+  color: grey;
+}
+
+.user__profile {
+  border-radius: 8px;
+}
+
+.user__profile__top {
+  height: 170px;
+  margin: 0 auto;
+  max-width: 170px;
+}
+
+.user__profile__top__img {
+  height: 100%;
+  border-radius: 50%;
+}
+
+.user__profile__username {
+  margin-bottom: 3px !important;
 }
 
 html,
@@ -11767,13 +11800,8 @@ body {
 }
 
 main#content {
-  padding-top: 120px;
-}
-
-@media screen and (max-width: 1088px) {
-  main#content {
-    padding: 120px 30px 30px 30px;
-  }
+  min-height: 100vh;
+  margin-top: 56px;
 }
 
 .label {

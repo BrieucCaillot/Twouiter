@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiController extends PostController
 {
-    public function posts() {
+    public function allPosts() {
         $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
-        foreach ($posts as &$post) {
+        foreach ($posts as $post) {
             Carbon::setLocale('fr');
             $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
             $post->user = User::find($post->user_id);
@@ -21,6 +21,16 @@ class ApiController extends PostController
 
     public function user() {
         return Auth::user();
+    }
+
+    public function posts() {
+        $user = Auth::user()->posts;
+        foreach ($user as $post) {
+            Carbon::setLocale('fr');
+            $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
+            $post->user = User::find($post->user_id);
+        }
+        return $user;
     }
 
     public function userById($id) {

@@ -1,5 +1,5 @@
 <template>
-    <main id="content" class="login background-color-secondary">
+    <main id="content" class="login has-background-white">
         <div class="login__content columns full-h">
             <div class="login__content__left column is-6"></div>
             <div class="column is-6 background-color-primary">
