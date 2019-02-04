@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -28,7 +29,26 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts() {
         return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id')->withTimestamps();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
     }
 }

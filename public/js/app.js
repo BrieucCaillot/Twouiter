@@ -2040,6 +2040,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
   data: function data() {
@@ -2077,7 +2092,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/post', {
           message: this.message
         }).then(function (response) {
-          console.log(response);
+          console.log('response', response);
           if (response.status == 200) _this3.getPosts();
         }).catch(function (error) {
           console.log(error);
@@ -33349,7 +33364,9 @@ var render = function() {
                   ]
                 )
               ]
-            )
+            ),
+            _vm._v(" "),
+            _vm._m(1)
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
@@ -33373,7 +33390,7 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._m(1),
+                      _vm._m(2),
                       _vm._v(" "),
                       _c("div", { staticClass: "level" }, [
                         _c("input", {
@@ -33402,7 +33419,7 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _vm._m(2)
+                      _vm._m(3)
                     ]
                   )
                 ])
@@ -33421,7 +33438,7 @@ var render = function() {
                         "posts__post mg-t1 has-background-white columns is-flex"
                     },
                     [
-                      _vm._m(3, true),
+                      _vm._m(4, true),
                       _vm._v(" "),
                       _c("div", { staticClass: "column posts__post__right" }, [
                         _c(
@@ -33506,6 +33523,39 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass:
+          "columns posts__user background-color-secondary has-text-white mg-t2"
+      },
+      [
+        _c("div", { staticClass: "column" }, [
+          _c("div", { staticClass: "level" }, [
+            _c("span", [_vm._v("Tweets")]),
+            _vm._v(" "),
+            _c("span", [_vm._v("xx")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "level" }, [
+            _c("span", [_vm._v("Abonnements")]),
+            _vm._v(" "),
+            _c("span", [_vm._v("xx")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "level" }, [
+            _c("span", [_vm._v("Abonnés")]),
+            _vm._v(" "),
+            _c("span", [_vm._v("xx")])
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "level" }, [
       _c("h1", { staticClass: "is-size-4" }, [_vm._v("Quoi de neuf ?")])
     ])
@@ -33521,7 +33571,7 @@ var staticRenderFns = [
           staticClass: "button background-color-primary has-text-white",
           attrs: { type: "submit" }
         },
-        [_vm._v("Tweeter\n                                ")]
+        [_vm._v("Tweet")]
       )
     ])
   },

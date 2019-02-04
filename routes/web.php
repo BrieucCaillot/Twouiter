@@ -18,15 +18,21 @@ Route::middleware('web')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    // Redirect to view
     Route::get('/', 'PostController@index');
     Route::get('/user/{username}', 'UserController@index');
 
     Route::get('/user', function () {
         return redirect()->back();
     });
+    Route::get('/api/user/{username}', 'ApiController@user');
+    Route::get('/api/user/{username}/posts', 'ApiController@posts');
 
-    Route::get('/api/user', 'ApiController@user');
-    Route::get('/api/posts', 'ApiController@posts');
+    Route::get('/api/followers', 'ApiController@followers');
+    Route::get('/api/followings', 'ApiController@followings');
+//    Route::post('profile/{profileId}/follow', 'ProfileController@followUser')->name('user.follow');
+//    Route::post('/{profileId}/unfollow', 'ProfileController@unFollowUser')->name('user.unfollow');
 
     Route::get('/api/user/{id}', 'ApiController@userById');
     Route::get('/api/user/{id}/posts', 'ApiController@userPostsById');

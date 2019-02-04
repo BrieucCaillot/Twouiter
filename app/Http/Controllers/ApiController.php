@@ -19,18 +19,34 @@ class ApiController extends PostController
         return $posts;
     }
 
-    public function user() {
-        return Auth::user();
+    public function user($username) {
+        $user = User::where('username', 'like', $username)->first();
+
+        $obj = [
+            'user' => $user,
+            'following' =>$user->followings,
+            'followers' => $user->followers,
+        ];
+        return $obj;
     }
 
-    public function posts() {
-        $user = Auth::user()->posts;
-        foreach ($user as $post) {
+    public function posts($username) {
+        $posts = User::where('username', 'like', $username)->first()->posts;
+
+        foreach ($posts as $post) {
             Carbon::setLocale('fr');
             $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
             $post->user = User::find($post->user_id);
         }
-        return $user;
+        return $posts;
+    }
+
+    public function followers() {
+        return Auth::user()->followers;
+    }
+
+     public function followings() {
+        return Auth::user()->followings;
     }
 
     public function userById($id) {
@@ -40,10 +56,5 @@ class ApiController extends PostController
     public function userPostsById($id) {
         $user = User::find($id);
         return $user->posts;
-    }
-
-    public function test() {
-        $post = Post::find(1);
-        return $post->user;
     }
 }

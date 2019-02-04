@@ -17,6 +17,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="columns posts__user background-color-secondary has-text-white mg-t2">
+                        <div class="column">
+                            <div class="level">
+                                <span>Tweets</span>
+                                <span>xx</span>
+                            </div>
+                            <div class="level">
+                                <span>Abonnements</span>
+                                <span>xx</span>
+                            </div>
+                            <div class="level">
+                                <span>Abonnés</span>
+                                <span>xx</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
                     <div class="posts__newpost columns background-color-secondary has-text-white">
@@ -29,8 +45,7 @@
                                     <input class="input" type="text" v-model="message" placeholder="Quoi de neuf ?">
                                 </div>
                                 <div class="level">
-                                    <button class="button background-color-primary has-text-white" type="submit">Tweeter
-                                    </button>
+                                    <button class="button background-color-primary has-text-white" type="submit">Tweet</button>
                                 </div>
                             </form>
                         </div>
@@ -100,7 +115,7 @@
 						message: this.message
 					})
 						.then((response) => {
-							console.log(response)
+							console.log('response', response)
 							if (response.status == 200) this.getPosts();
 						})
 						.catch((error) => {
