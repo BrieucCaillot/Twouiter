@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiController extends PostController
 {
-    public function allPosts() {
+    public function allPosts()
+    {
         $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
         foreach ($posts as $post) {
             Carbon::setLocale('fr');
@@ -19,42 +20,47 @@ class ApiController extends PostController
         return $posts;
     }
 
-    public function user($username) {
-        $user = User::where('username', 'like', $username)->first();
-
-        $obj = [
-            'user' => $user,
-            'following' =>$user->followings,
-            'followers' => $user->followers,
-        ];
-        return $obj;
-    }
-
-    public function posts($username) {
-        $posts = User::where('username', 'like', $username)->first()->posts;
-
-        foreach ($posts as $post) {
-            Carbon::setLocale('fr');
-            $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
-            $post->user = User::find($post->user_id);
+    public function user($username = null)
+    {
+        if ($username !== null) {
+            $user = User::where('username', 'like', $username)->first();
+            $user->countPosts = sizeof($user->posts);
+            $user->countFollowings = sizeof($user->followings);
+            $user->countFollowers = sizeof($user->followers);
+        } else {
+            $user = Auth::user();
+            $user->countPosts = sizeof($user->posts);
+            $user->countFollowings = sizeof($user->followings);
+            $user->countFollowers = sizeof($user->followers);
         }
-        return $posts;
+        return $user;
     }
 
-    public function followers() {
+    public function posts($username = null)
+    {
+        if ($username !== null) {
+            $user = User::where('username', 'like', $username)->first();
+            $userPosts = $user->posts;
+
+            foreach ($userPosts as $post) {
+                Carbon::setLocale('fr');
+                $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
+                $post->user = User::find($post->user_id);
+            }
+        } else {
+            $user = Auth::user();
+            $userPosts = $user->posts;
+        }
+        return $userPosts;
+    }
+
+    public function followers()
+    {
         return Auth::user()->followers;
     }
 
-     public function followings() {
+    public function followings()
+    {
         return Auth::user()->followings;
-    }
-
-    public function userById($id) {
-        return User::find($id);
-    }
-
-    public function userPostsById($id) {
-        $user = User::find($id);
-        return $user->posts;
     }
 }

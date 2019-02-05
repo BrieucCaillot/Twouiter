@@ -27,15 +27,15 @@
                         <div class="column">
                             <div class="level">
                                 <span>Tweets</span>
-                                <span>xx</span>
+                                <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
                                 <span>Abonnements</span>
-                                <span>xx</span>
+                                <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
                                 <span>Abonnés</span>
-                                <span>xx</span>
+                                <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
                     </div>
@@ -50,12 +50,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="columns">
+                    <div v-if="user.posts.length > 0" class="columns">
                         <div class="column">
-                            <div v-for="post in posts" class="posts__post mg-t1 has-background-white columns is-flex">
+                            <div v-for="post in user.posts" class="posts__post mg-t1 has-background-white columns is-flex">
                                 <div class="column posts__post__left">
-                                    <div class="posts__post__left__img"
-                                         style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                    <a :href="/user/ + user.username">
+                                        <div class="posts__post__left__img"
+                                             style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                    </a>
                                 </div>
                                 <div class="column posts__post__right">
                                     <div class="level is-mobile posts__post__right__top has-text-left">
@@ -87,28 +89,24 @@
 		name: "UserComponent",
 		data() {
 			return {
-				user: '',
-				posts: ''
-			}
+				user: {
+					posts: ''
+				}
+            }
 		},
 		methods: {
-			getUser() {
-				axios.get('/api/user')
+			getUser(username) {
+				axios.get(`/api/test/${username}`)
 					.then((response) => this.user = response.data)
-					.catch((error) => console.log(error))
-			},
-			getPosts() {
-				axios.get('/api/posts')
-					.then((response) => {
-						console.log(response);
-						this.posts = response.data
-					})
-					.catch((error) => console.log(error))
-			},
+					.catch((error) =>  {
+						if (500 == error.response.status) window.location.href = '/'
+                    })
+			}
 		},
-		mounted() {
-			this.getUser();
-			this.getPosts();
+		beforeMount() {
+			let url = window.location.href.split('/');
+			let username = url.slice(url.length-1);
+			this.getUser(username);
 		}
 	}
 </script>

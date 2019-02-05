@@ -2055,13 +2055,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
   data: function data() {
     return {
       message: '',
-      user: '',
-      posts: ''
+      user: {
+        posts: '',
+        countPosts: ''
+      },
+      allPosts: ''
     };
   },
   methods: {
@@ -2069,8 +2074,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/api/allposts').then(function (response) {
-        console.log(response);
-        _this.posts = response.data.data;
+        return _this.allPosts = response.data.data;
       }).catch(function (error) {
         return console.log(error);
       });
@@ -2078,9 +2082,8 @@ __webpack_require__.r(__webpack_exports__);
     getUser: function getUser() {
       var _this2 = this;
 
-      axios.get('/api/user').then(function (response) {
-        console.log(response);
-        _this2.user = response.data;
+      axios.get('/api/test').then(function (response) {
+        return _this2.user = response.data;
       }).catch(function (error) {
         return console.log(error);
       });
@@ -2092,13 +2095,15 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/post', {
           message: this.message
         }).then(function (response) {
-          console.log('response', response);
-          if (response.status == 200) _this3.getPosts();
+          if (response.status == 200) {
+            _this3.getPosts();
+
+            _this3.user.countPosts++;
+          }
+
+          ;
         }).catch(function (error) {
           console.log(error);
-          return;
-          _this3.errors.username = error.response.data.errors.username;
-          _this3.errors.password = error.response.data.errors.password;
         });
       }
     }
@@ -2204,38 +2209,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserComponent",
   data: function data() {
     return {
-      user: '',
-      posts: ''
+      user: {
+        posts: ''
+      }
     };
   },
   methods: {
-    getUser: function getUser() {
+    getUser: function getUser(username) {
       var _this = this;
 
-      axios.get('/api/user').then(function (response) {
+      axios.get("/api/test/".concat(username)).then(function (response) {
         return _this.user = response.data;
       }).catch(function (error) {
-        return console.log(error);
-      });
-    },
-    getPosts: function getPosts() {
-      var _this2 = this;
-
-      axios.get('/api/posts').then(function (response) {
-        console.log(response);
-        _this2.posts = response.data;
-      }).catch(function (error) {
-        return console.log(error);
+        if (500 == error.response.status) window.location.href = '/';
       });
     }
   },
-  mounted: function mounted() {
-    this.getUser();
-    this.getPosts();
+  beforeMount: function beforeMount() {
+    var url = window.location.href.split('/');
+    var username = url.slice(url.length - 1);
+    this.getUser(username);
   }
 });
 
@@ -33366,7 +33365,34 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _vm._m(1)
+            _c(
+              "div",
+              {
+                staticClass:
+                  "columns posts__user background-color-secondary has-text-white mg-t2"
+              },
+              [
+                _c("div", { staticClass: "column" }, [
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Tweets")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countPosts))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Abonnements")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Abonnés")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
+                  ])
+                ])
+              ]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
@@ -33390,7 +33416,7 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._m(2),
+                      _vm._m(1),
                       _vm._v(" "),
                       _c("div", { staticClass: "level" }, [
                         _c("input", {
@@ -33419,85 +33445,121 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _vm._m(3)
+                      _vm._m(2)
                     ]
                   )
                 ])
               ]
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "columns" }, [
-              _c(
-                "div",
-                { staticClass: "column" },
-                _vm._l(_vm.posts, function(post) {
-                  return _c(
+            _vm.user.posts.length > 0
+              ? _c("div", { staticClass: "columns" }, [
+                  _c(
                     "div",
-                    {
-                      staticClass:
-                        "posts__post mg-t1 has-background-white columns is-flex"
-                    },
-                    [
-                      _vm._m(4, true),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "column posts__post__right" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "level is-mobile posts__post__right__top has-text-left"
-                          },
-                          [
-                            _c("div", { staticClass: "level-left" }, [
+                    { staticClass: "column" },
+                    _vm._l(_vm.allPosts, function(post) {
+                      return _c(
+                        "div",
+                        {
+                          staticClass:
+                            "posts__post mg-t1 has-background-white columns is-flex"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "column posts__post__left" },
+                            [
                               _c(
                                 "a",
-                                { attrs: { href: /user/ + _vm.user.username } },
+                                {
+                                  attrs: { href: /user/ + post.user.username }
+                                },
                                 [
-                                  _c(
-                                    "strong",
-                                    { staticClass: "posts__post__right__name" },
-                                    [_vm._v(_vm._s(_vm.user.name))]
-                                  )
+                                  _c("div", {
+                                    staticClass: "posts__post__left__img",
+                                    staticStyle: {
+                                      background:
+                                        "url('https://via.placeholder.com/150') no-repeat center center"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column posts__post__right" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "level is-mobile posts__post__right__top has-text-left"
+                                },
+                                [
+                                  _c("div", { staticClass: "level-left" }, [
+                                    _c(
+                                      "a",
+                                      {
+                                        attrs: {
+                                          href: /user/ + post.user.username
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "strong",
+                                          {
+                                            staticClass:
+                                              "posts__post__right__name"
+                                          },
+                                          [_vm._v(_vm._s(post.user.name))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "posts__post__right__username"
+                                      },
+                                      [_vm._v("@" + _vm._s(post.user.username))]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "level-right" }, [
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "posts__post__right__date is-size-7"
+                                      },
+                                      [_vm._v(_vm._s(post.human_date))]
+                                    )
+                                  ])
                                 ]
                               ),
                               _vm._v(" "),
-                              _c(
-                                "span",
-                                { staticClass: "posts__post__right__username" },
-                                [_vm._v("@" + _vm._s(post.user.username))]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "level-right" }, [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "posts__post__right__date is-size-7"
-                                },
-                                [_vm._v(_vm._s(post.human_date))]
-                              )
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "level" }, [
-                          _c(
-                            "p",
-                            {
-                              staticClass:
-                                "has-text-black posts__post__right__content"
-                            },
-                            [_vm._v(_vm._s(post.content))]
+                              _c("div", { staticClass: "level" }, [
+                                _c(
+                                  "p",
+                                  {
+                                    staticClass:
+                                      "has-text-black posts__post__right__content"
+                                  },
+                                  [_vm._v(_vm._s(post.content))]
+                                )
+                              ])
+                            ]
                           )
-                        ])
-                      ])
-                    ]
+                        ]
+                      )
+                    }),
+                    0
                   )
-                }),
-                0
-              )
-            ])
+                ])
+              : _vm._e()
           ])
         ])
       ])
@@ -33523,39 +33585,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "columns posts__user background-color-secondary has-text-white mg-t2"
-      },
-      [
-        _c("div", { staticClass: "column" }, [
-          _c("div", { staticClass: "level" }, [
-            _c("span", [_vm._v("Tweets")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("xx")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "level" }, [
-            _c("span", [_vm._v("Abonnements")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("xx")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "level" }, [
-            _c("span", [_vm._v("Abonnés")]),
-            _vm._v(" "),
-            _c("span", [_vm._v("xx")])
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "level" }, [
       _c("h1", { staticClass: "is-size-4" }, [_vm._v("Quoi de neuf ?")])
     ])
@@ -33573,20 +33602,6 @@ var staticRenderFns = [
         },
         [_vm._v("Tweet")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column posts__post__left" }, [
-      _c("div", {
-        staticClass: "posts__post__left__img",
-        staticStyle: {
-          background:
-            "url('https://via.placeholder.com/150') no-repeat center center"
-        }
-      })
     ])
   }
 ]
@@ -33657,85 +33672,139 @@ var render = function() {
               _vm._v(" "),
               _c("hr"),
               _vm._v(" "),
-              _vm._m(1)
+              _c("div", { staticClass: "columns" }, [
+                _c("div", { staticClass: "column" }, [
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Tweets")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countPosts))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Abonnements")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "level" }, [
+                    _c("span", [_vm._v("Abonnés")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
+                  ])
+                ])
+              ])
             ]
           ),
           _vm._v(" "),
           _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
-            _vm._m(2),
+            _vm._m(1),
             _vm._v(" "),
-            _c("div", { staticClass: "columns" }, [
-              _c(
-                "div",
-                { staticClass: "column" },
-                _vm._l(_vm.posts, function(post) {
-                  return _c(
+            _vm.user.posts.length > 0
+              ? _c("div", { staticClass: "columns" }, [
+                  _c(
                     "div",
-                    {
-                      staticClass:
-                        "posts__post mg-t1 has-background-white columns is-flex"
-                    },
-                    [
-                      _vm._m(3, true),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "column posts__post__right" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "level is-mobile posts__post__right__top has-text-left"
-                          },
-                          [
-                            _c("div", { staticClass: "level-left" }, [
+                    { staticClass: "column" },
+                    _vm._l(_vm.user.posts, function(post) {
+                      return _c(
+                        "div",
+                        {
+                          staticClass:
+                            "posts__post mg-t1 has-background-white columns is-flex"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "column posts__post__left" },
+                            [
                               _c(
                                 "a",
                                 { attrs: { href: /user/ + _vm.user.username } },
                                 [
-                                  _c(
-                                    "strong",
-                                    { staticClass: "posts__post__right__name" },
-                                    [_vm._v(_vm._s(_vm.user.name))]
-                                  )
+                                  _c("div", {
+                                    staticClass: "posts__post__left__img",
+                                    staticStyle: {
+                                      background:
+                                        "url('https://via.placeholder.com/150') no-repeat center center"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "column posts__post__right" },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "level is-mobile posts__post__right__top has-text-left"
+                                },
+                                [
+                                  _c("div", { staticClass: "level-left" }, [
+                                    _c(
+                                      "a",
+                                      {
+                                        attrs: {
+                                          href: /user/ + _vm.user.username
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "strong",
+                                          {
+                                            staticClass:
+                                              "posts__post__right__name"
+                                          },
+                                          [_vm._v(_vm._s(_vm.user.name))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "posts__post__right__username"
+                                      },
+                                      [_vm._v("@" + _vm._s(_vm.user.username))]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "level-right" }, [
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "posts__post__right__date is-size-7"
+                                      },
+                                      [_vm._v(_vm._s(post.human_date))]
+                                    )
+                                  ])
                                 ]
                               ),
                               _vm._v(" "),
-                              _c(
-                                "span",
-                                { staticClass: "posts__post__right__username" },
-                                [_vm._v("@" + _vm._s(_vm.user.username))]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "level-right" }, [
-                              _c(
-                                "span",
-                                {
-                                  staticClass:
-                                    "posts__post__right__date is-size-7"
-                                },
-                                [_vm._v(_vm._s(post.human_date))]
-                              )
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "level" }, [
-                          _c(
-                            "p",
-                            {
-                              staticClass:
-                                "has-text-black posts__post__right__content"
-                            },
-                            [_vm._v(_vm._s(post.content))]
+                              _c("div", { staticClass: "level" }, [
+                                _c(
+                                  "p",
+                                  {
+                                    staticClass:
+                                      "has-text-black posts__post__right__content"
+                                  },
+                                  [_vm._v(_vm._s(post.content))]
+                                )
+                              ])
+                            ]
                           )
-                        ])
-                      ])
-                    ]
+                        ]
+                      )
+                    }),
+                    0
                   )
-                }),
-                0
-              )
-            ])
+                ])
+              : _vm._e()
           ])
         ])
       ])
@@ -33766,32 +33835,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "columns" }, [
       _c("div", { staticClass: "column" }, [
         _c("div", { staticClass: "level" }, [
-          _c("span", [_vm._v("Tweets")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("xx")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "level" }, [
-          _c("span", [_vm._v("Abonnements")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("xx")])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "level" }, [
-          _c("span", [_vm._v("Abonnés")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("xx")])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "columns" }, [
-      _c("div", { staticClass: "column" }, [
-        _c("div", { staticClass: "level" }, [
           _c("div", { staticClass: "level-left" }, [
             _c(
               "h1",
@@ -33801,20 +33844,6 @@ var staticRenderFns = [
           ])
         ])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column posts__post__left" }, [
-      _c("div", {
-        staticClass: "posts__post__left__img",
-        staticStyle: {
-          background:
-            "url('https://via.placeholder.com/150') no-repeat center center"
-        }
-      })
     ])
   }
 ]

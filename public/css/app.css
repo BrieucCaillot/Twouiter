@@ -11802,6 +11802,7 @@ body {
 main#content {
   min-height: 100vh;
   margin-top: 56px;
+  padding-bottom: 86px;
 }
 
 .label {

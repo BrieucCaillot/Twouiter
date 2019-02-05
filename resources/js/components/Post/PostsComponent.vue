@@ -21,15 +21,15 @@
                         <div class="column">
                             <div class="level">
                                 <span>Tweets</span>
-                                <span>xx</span>
+                                <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
                                 <span>Abonnements</span>
-                                <span>xx</span>
+                                <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
                                 <span>Abonnés</span>
-                                <span>xx</span>
+                                <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
                     </div>
@@ -50,18 +50,20 @@
                             </form>
                         </div>
                     </div>
-                    <div class="columns">
+                    <div v-if="user.posts.length > 0" class="columns">
                         <div class="column">
-                            <div v-for="post in posts" class="posts__post mg-t1 has-background-white columns is-flex">
+                            <div v-for="post in allPosts" class="posts__post mg-t1 has-background-white columns is-flex">
                                 <div class="column posts__post__left">
+                                    <a :href="/user/ + post.user.username">
                                     <div class="posts__post__left__img"
                                          style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                    </a>
                                 </div>
                                 <div class="column posts__post__right">
                                     <div class="level is-mobile posts__post__right__top has-text-left">
                                         <div class="level-left">
-                                            <a :href="/user/ + user.username">
-                                                <strong class="posts__post__right__name">{{ user.name }}</strong>
+                                            <a :href="/user/ + post.user.username">
+                                                <strong class="posts__post__right__name">{{ post.user.name }}</strong>
                                             </a>
                                             <span class="posts__post__right__username">@{{ post.user.username }}</span>
                                         </div>
@@ -88,25 +90,22 @@
 		data() {
 			return {
 				message: '',
-				user: '',
-				posts: ''
+				user: {
+					posts: '',
+					countPosts: ''
+                },
+				allPosts: ''
 			}
 		},
 		methods: {
 			getPosts() {
 				axios.get('/api/allposts')
-					.then((response) => {
-						console.log(response);
-						this.posts = response.data.data
-					})
+					.then((response) => this.allPosts = response.data.data)
 					.catch((error) => console.log(error))
 			},
 			getUser() {
-				axios.get('/api/user')
-					.then((response) => {
-						console.log(response);
-						this.user = response.data
-					})
+				axios.get('/api/test')
+					.then((response) => this.user = response.data)
 					.catch((error) => console.log(error))
 			},
 			newTweet() {
@@ -115,14 +114,13 @@
 						message: this.message
 					})
 						.then((response) => {
-							console.log('response', response)
-							if (response.status == 200) this.getPosts();
+							if (response.status == 200) {
+								this.getPosts();
+								this.user.countPosts++
+                            };
 						})
 						.catch((error) => {
 							console.log(error);
-							return;
-							this.errors.username = error.response.data.errors.username
-							this.errors.password = error.response.data.errors.password
 						})
 				}
 			}
