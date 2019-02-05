@@ -11187,7 +11187,7 @@ label.panel-block:hover {
 }
 
 .posts {
-  padding-top: 80px;
+  padding: 80px 0;
 }
 
 @media screen and (max-width: 1088px) {
@@ -11802,7 +11802,6 @@ body {
 main#content {
   min-height: 100vh;
   margin-top: 56px;
-  padding-bottom: 86px;
 }
 
 .label {
