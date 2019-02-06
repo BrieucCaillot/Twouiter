@@ -25,17 +25,19 @@
                     <hr>
                     <div class="columns">
                         <div class="column">
-                            <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}` ">Tweets</a>
-                                <span>{{ user.countPosts }}</span>
-                            </div>
-                            <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnements</a>
-                                <span>{{ user.countFollowings }}</span>
-                            </div>
-                            <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
-                                <span>{{ user.countFollowers }}</span>
+                            <div class="column">
+                                <div class="level">
+                                    <a class="has-text-white" :href=" `/user/${user.username}` ">Tweets</a>
+                                    <span>{{ user.countPosts }}</span>
+                                </div>
+                                <div class="level">
+                                    <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
+                                    <span>{{ user.countFollowings }}</span>
+                                </div>
+                                <div class="level">
+                                    <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
+                                    <span>{{ user.countFollowers }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,10 +53,10 @@
                         </div>
                     </div>
                     <div v-if="followers.length > 0" class="columns is-multiline">
-                        <div v-for="followers in followers" class="column is-12">
+                        <div v-for="follower in followers" class="column is-12">
                             <div class="posts__post mg-t1 has-background-white columns is-flex">
                                 <div class="column posts__post__left">
-                                    <a :href="/user/ + followers.username">
+                                    <a :href="/user/ + follower.username">
                                         <div class="posts__post__left__img"
                                              style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
                                     </a>
@@ -63,10 +65,10 @@
                                 <div class="column posts__post__right">
                                     <div class="level is-mobile posts__post__right__top has-text-left">
                                         <div class="level-left">
-                                            <a :href="/user/ + followers.username">
-                                                <strong class="posts__post__right__name">{{ followers.name }}</strong>
+                                            <a :href="/user/ + follower.username">
+                                                <strong class="posts__post__right__name">{{ follower.name }}</strong>
                                             </a>
-                                            <span class="posts__post__right__username">@{{ followers.username }}</span>
+                                            <span class="posts__post__right__username">@{{ follower.username }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +83,7 @@
 
 <script>
 	export default {
-		name: "FollowingComponent",
+		name: "FollowersComponent",
 		data() {
 			return {
 				user: '',
@@ -96,9 +98,12 @@
 						if (500 == error.response.status) window.location.href = '/'
                     })
 			},
-            getFollowings(username) {
+            getFollowers(username) {
 				axios.get(`/api/userf2/${username}/followers`)
-                    .then((response) => this.followers = response.data)
+                    .then((response) => {
+                    	console.log(response);
+                    	this.followers = response.data
+                    })
                     .catch((error) => {
 	                    if (500 == error.response.status) window.location.href = '/'
                     })
@@ -108,7 +113,7 @@
 			let url = window.location.href.split('/');
 			let username = url.slice(4, 5);
 			this.getUser(username);
-			this.getFollowings(username);
+			this.getFollowers(username);
 		}
 	}
 </script>
