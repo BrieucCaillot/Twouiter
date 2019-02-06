@@ -54,13 +54,27 @@ class ApiController extends PostController
         return $userPosts;
     }
 
-    public function followers()
+    public function followings($username = null)
     {
-        return Auth::user()->followers;
+        if ($username !== null) {
+            $user = User::where('username', 'like', $username)->first();
+            $userFollowings = $user->followings;
+        } else {
+            $user = Auth::user();
+            $userFollowings = $user->followings;
+        }
+        return $userFollowings;
     }
 
-    public function followings()
+    public function followers($username = null)
     {
-        return Auth::user()->followings;
+        if ($username !== null) {
+            $user = User::where('username', 'like', $username)->first();
+            $userFollowers = $user->followers;
+        } else {
+            $user = Auth::user();
+            $userFollowers = $user->followers;
+        }
+        return $userFollowers;
     }
 }

@@ -45,34 +45,29 @@
                         <div class="column">
                             <div class="level">
                                 <div class="level-left">
-                                    <h1 class="color-secondary is-size-4 has-text-white">Latests tweets</h1>
+                                    <h1 class="color-secondary is-size-4 has-text-white">Followings</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div v-if="user.posts.length > 0" class="columns">
-                        <div class="column">
-                            <div v-for="post in user.posts" class="posts__post mg-t1 has-background-white columns is-flex">
+                    <div v-if="followings.length > 0" class="columns is-multiline">
+                        <div v-for="following in followings" class="column is-12">
+                            <div class="posts__post mg-t1 has-background-white columns is-flex">
                                 <div class="column posts__post__left">
-                                    <a :href="/user/ + user.username">
+                                    <a :href="/user/ + following.username">
                                         <div class="posts__post__left__img"
                                              style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
                                     </a>
                                 </div>
+
                                 <div class="column posts__post__right">
                                     <div class="level is-mobile posts__post__right__top has-text-left">
                                         <div class="level-left">
-                                            <a :href="/user/ + user.username">
-                                                <strong class="posts__post__right__name">{{ user.name }}</strong>
+                                            <a :href="/user/ + following.username">
+                                                <strong class="posts__post__right__name">{{ following.name }}</strong>
                                             </a>
-                                            <span class="posts__post__right__username">@{{ user.username }}</span>
+                                            <span class="posts__post__right__username">@{{ following.username }}</span>
                                         </div>
-                                        <div class="level-right">
-                                            <span class="posts__post__right__date is-size-7">{{ post.human_date }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="level">
-                                        <p class="has-text-black posts__post__right__content">{{ post.content }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -86,12 +81,11 @@
 
 <script>
 	export default {
-		name: "UserComponent",
+		name: "FollowingComponent",
 		data() {
 			return {
-				user: {
-					posts: ''
-				}
+				user: '',
+				followings: ''
             }
 		},
 		methods: {
@@ -101,12 +95,20 @@
 					.catch((error) =>  {
 						if (500 == error.response.status) window.location.href = '/'
                     })
-			}
+			},
+            getFollowings(username) {
+				axios.get(`/api/userf1/${username}/followings`)
+                    .then((response) => this.followings = response.data)
+                    .catch((error) => {
+	                    if (500 == error.response.status) window.location.href = '/'
+                    })
+            }
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
-			let username = url.slice(url.length-1);
+			let username = url.slice(4, 5);
 			this.getUser(username);
+			this.getFollowings(username);
 		}
 	}
 </script>

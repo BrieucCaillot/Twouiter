@@ -11,4 +11,12 @@ class UserController extends Controller
     {
         return view('user.user');
     }
+    public function followings()
+    {
+        return view('user.followings');
+    }
+    public function followers()
+    {
+        return view('user.followers');
+    }
 }

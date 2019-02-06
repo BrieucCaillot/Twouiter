@@ -20,15 +20,15 @@
                     <div class="columns posts__user background-color-secondary has-text-white mg-t2">
                         <div class="column">
                             <div class="level">
-                                <span>Tweets</span>
+                                <a class="has-text-white" :href=" `/user/${user.username}` ">Tweets</a>
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <span>Abonnements</span>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <span>Abonnés</span>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
