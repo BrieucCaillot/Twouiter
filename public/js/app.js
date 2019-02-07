@@ -2082,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
     getUser: function getUser() {
       var _this2 = this;
 
-      axios.get('/api/test').then(function (response) {
+      axios.get('/api/userc').then(function (response) {
         return _this2.user = response.data;
       }).catch(function (error) {
         return console.log(error);
@@ -2208,6 +2208,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FollowersComponent",
   data: function data() {
@@ -2220,7 +2224,7 @@ __webpack_require__.r(__webpack_exports__);
     getUser: function getUser(username) {
       var _this = this;
 
-      axios.get("/api/test/".concat(username)).then(function (response) {
+      axios.get("/api/userc/".concat(username)).then(function (response) {
         return _this.user = response.data;
       }).catch(function (error) {
         if (500 == error.response.status) window.location.href = '/';
@@ -2229,7 +2233,7 @@ __webpack_require__.r(__webpack_exports__);
     getFollowers: function getFollowers(username) {
       var _this2 = this;
 
-      axios.get("/api/userf2/".concat(username, "/followers")).then(function (response) {
+      axios.get("/api/user/followers/".concat(username)).then(function (response) {
         console.log(response);
         _this2.followers = response.data;
       }).catch(function (error) {
@@ -2337,6 +2341,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FollowingComponent",
   data: function data() {
@@ -2349,7 +2356,7 @@ __webpack_require__.r(__webpack_exports__);
     getUser: function getUser(username) {
       var _this = this;
 
-      axios.get("/api/test/".concat(username)).then(function (response) {
+      axios.get("/api/userc/".concat(username)).then(function (response) {
         return _this.user = response.data;
       }).catch(function (error) {
         if (500 == error.response.status) window.location.href = '/';
@@ -2358,7 +2365,7 @@ __webpack_require__.r(__webpack_exports__);
     getFollowings: function getFollowings(username) {
       var _this2 = this;
 
-      axios.get("/api/userf1/".concat(username, "/followings")).then(function (response) {
+      axios.get("/api/user/followings/".concat(username)).then(function (response) {
         return _this2.followings = response.data;
       }).catch(function (error) {
         if (500 == error.response.status) window.location.href = '/';
@@ -2474,17 +2481,26 @@ __webpack_require__.r(__webpack_exports__);
   name: "UserComponent",
   data: function data() {
     return {
-      user: {
-        posts: ''
-      }
+      user: '',
+      posts: ''
     };
   },
   methods: {
     getUser: function getUser(username) {
       var _this = this;
 
-      axios.get("/api/test/".concat(username)).then(function (response) {
+      axios.get("/api/userc/".concat(username)).then(function (response) {
         return _this.user = response.data;
+      }).catch(function (error) {
+        if (500 == error.response.status) window.location.href = '/';
+      });
+    },
+    getPosts: function getPosts(username) {
+      var _this2 = this;
+
+      axios.get("/api/user/posts/".concat(username)).then(function (response) {
+        console.log(response);
+        _this2.posts = response.data;
       }).catch(function (error) {
         if (500 == error.response.status) window.location.href = '/';
       });
@@ -2494,6 +2510,7 @@ __webpack_require__.r(__webpack_exports__);
     var url = window.location.href.split('/');
     var username = url.slice(url.length - 1);
     this.getUser(username);
+    this.getPosts(username);
   }
 });
 
@@ -33654,7 +33671,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followings"
                         }
                       },
-                      [_vm._v("Abonnements")]
+                      [_vm._v("Followings")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
@@ -33669,7 +33686,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followers"
                         }
                       },
-                      [_vm._v("Abonnés")]
+                      [_vm._v("Followers")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
@@ -33703,7 +33720,7 @@ var render = function() {
                       _vm._m(1),
                       _vm._v(" "),
                       _c("div", { staticClass: "level" }, [
-                        _c("input", {
+                        _c("textarea", {
                           directives: [
                             {
                               name: "model",
@@ -33712,10 +33729,11 @@ var render = function() {
                               expression: "message"
                             }
                           ],
-                          staticClass: "input",
+                          staticClass: "textarea",
                           attrs: {
+                            rows: "2",
                             type: "text",
-                            placeholder: "Quoi de neuf ?"
+                            placeholder: "Whats up ?"
                           },
                           domProps: { value: _vm.message },
                           on: {
@@ -33884,7 +33902,7 @@ var staticRenderFns = [
           staticClass: "button background-color-primary has-text-white",
           attrs: { type: "submit" }
         },
-        [_vm._v("Tweet")]
+        [_vm._v("Send")]
       )
     ])
   }
@@ -33981,7 +33999,7 @@ var render = function() {
                             href: "/user/" + _vm.user.username + "/followings"
                           }
                         },
-                        [_vm._v("Abonnements")]
+                        [_vm._v("Followings")]
                       ),
                       _vm._v(" "),
                       _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
@@ -33996,7 +34014,7 @@ var render = function() {
                             href: "/user/" + _vm.user.username + "/followers"
                           }
                         },
-                        [_vm._v("Abonnés")]
+                        [_vm._v("Followers")]
                       ),
                       _vm._v(" "),
                       _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
@@ -34093,7 +34111,9 @@ var render = function() {
                   }),
                   0
                 )
-              : _vm._e()
+              : _c("div", [
+                  _vm._v("\n                    No followers\n                ")
+                ])
           ])
         ])
       ])
@@ -34227,7 +34247,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followings"
                         }
                       },
-                      [_vm._v("Abonnements")]
+                      [_vm._v("Followings")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
@@ -34242,7 +34262,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followers"
                         }
                       },
-                      [_vm._v("Abonnés")]
+                      [_vm._v("Followers")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
@@ -34340,7 +34360,11 @@ var render = function() {
                   }),
                   0
                 )
-              : _vm._e()
+              : _c("div", [
+                  _vm._v(
+                    "\n                    No Followings\n                "
+                  )
+                ])
           ])
         ])
       ])
@@ -34474,7 +34498,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followings"
                         }
                       },
-                      [_vm._v("Abonnements")]
+                      [_vm._v("Followings")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
@@ -34489,7 +34513,7 @@ var render = function() {
                           href: "/user/" + _vm.user.username + "/followers"
                         }
                       },
-                      [_vm._v("Abonnés")]
+                      [_vm._v("Followers")]
                     ),
                     _vm._v(" "),
                     _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
@@ -34502,12 +34526,12 @@ var render = function() {
           _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
             _vm._m(1),
             _vm._v(" "),
-            _vm.user.posts.length > 0
+            _vm.posts.length > 0
               ? _c("div", { staticClass: "columns" }, [
                   _c(
                     "div",
                     { staticClass: "column" },
-                    _vm._l(_vm.user.posts, function(post) {
+                    _vm._l(_vm.posts, function(post) {
                       return _c(
                         "div",
                         {
@@ -34572,7 +34596,7 @@ var render = function() {
                                         staticClass:
                                           "posts__post__right__username"
                                       },
-                                      [_vm._v("@" + _vm._s(_vm.user.username))]
+                                      [_vm._v("@" + _vm._s(post.username))]
                                     )
                                   ]),
                                   _vm._v(" "),

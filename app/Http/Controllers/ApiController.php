@@ -13,7 +13,6 @@ class ApiController extends PostController
     {
         $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
         foreach ($posts as $post) {
-            Carbon::setLocale('fr');
             $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
             $post->user = User::find($post->user_id);
         }
@@ -24,14 +23,14 @@ class ApiController extends PostController
     {
         if ($username !== null) {
             $user = User::where('username', 'like', $username)->first();
-            $user->countPosts = sizeof($user->posts);
-            $user->countFollowings = sizeof($user->followings);
-            $user->countFollowers = sizeof($user->followers);
+            $user->countPosts = $user->posts->count();
+            $user->countFollowings = $user->followings->count();
+            $user->countFollowers = $user->followers->count();
         } else {
             $user = Auth::user();
-            $user->countPosts = sizeof($user->posts);
-            $user->countFollowings = sizeof($user->followings);
-            $user->countFollowers = sizeof($user->followers);
+            $user->countPosts = $user->posts->count();
+            $user->countFollowings = $user->followings->count();
+            $user->countFollowers = $user->followers->count();
         }
         return $user;
     }
@@ -43,7 +42,6 @@ class ApiController extends PostController
             $userPosts = $user->posts;
 
             foreach ($userPosts as $post) {
-                Carbon::setLocale('fr');
                 $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
                 $post->user = User::find($post->user_id);
             }

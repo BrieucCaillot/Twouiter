@@ -27,14 +27,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/user', function () { return redirect()->route('home'); });
 
     Route::prefix('api')->group(function () {
-        Route::get('test/{username?}', 'ApiController@user');
-        Route::get('ok/posts/{username}', 'ApiController@posts');
-        Route::get('userf1/{username?}/followings',  'ApiController@followings');
-        Route::get('userf2/{username?}/followers', 'ApiController@followers');
+        Route::get('userc/{username?}', 'ApiController@user');
+        Route::get('user/posts/{username?}', 'ApiController@posts');
+        Route::get('user/followers/{username?}', 'ApiController@followers');
+        Route::get('user/followings/{username?}',  'ApiController@followings');
         Route::get('allposts', 'ApiController@allPosts');
     });
+
 //    Route::post('profile/{profileId}/follow', 'ProfileController@followUser')->name('user.follow');
 //    Route::post('/{profileId}/unfollow', 'ProfileController@unFollowUser')->name('user.unfollow');
+
     Route::post('/post', 'PostController@store');
 });
-

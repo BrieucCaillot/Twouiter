@@ -30,11 +30,11 @@
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -73,6 +73,9 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else>
+                        No Followings
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,14 +93,14 @@
 		},
 		methods: {
 			getUser(username) {
-				axios.get(`/api/test/${username}`)
+				axios.get(`/api/userc/${username}`)
 					.then((response) => this.user = response.data)
 					.catch((error) =>  {
 						if (500 == error.response.status) window.location.href = '/'
                     })
 			},
             getFollowings(username) {
-				axios.get(`/api/userf1/${username}/followings`)
+				axios.get(`/api/user/followings/${username}`)
                     .then((response) => this.followings = response.data)
                     .catch((error) => {
 	                    if (500 == error.response.status) window.location.href = '/'

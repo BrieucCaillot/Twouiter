@@ -30,11 +30,11 @@
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -50,9 +50,9 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="user.posts.length > 0" class="columns">
+                    <div v-if="posts.length > 0" class="columns">
                         <div class="column">
-                            <div v-for="post in user.posts" class="posts__post mg-t1 has-background-white columns is-flex">
+                            <div v-for="post in posts" class="posts__post mg-t1 has-background-white columns is-flex">
                                 <div class="column posts__post__left">
                                     <a :href="/user/ + user.username">
                                         <div class="posts__post__left__img"
@@ -65,7 +65,7 @@
                                             <a :href="/user/ + user.username">
                                                 <strong class="posts__post__right__name">{{ user.name }}</strong>
                                             </a>
-                                            <span class="posts__post__right__username">@{{ user.username }}</span>
+                                            <span class="posts__post__right__username">@{{ post.username }}</span>
                                         </div>
                                         <div class="level-right">
                                             <span class="posts__post__right__date is-size-7">{{ post.human_date }}</span>
@@ -89,24 +89,31 @@
 		name: "UserComponent",
 		data() {
 			return {
-				user: {
-					posts: ''
-				}
+				user: '',
+                posts: ''
             }
 		},
 		methods: {
 			getUser(username) {
-				axios.get(`/api/test/${username}`)
+				axios.get(`/api/userc/${username}`)
 					.then((response) => this.user = response.data)
 					.catch((error) =>  {
 						if (500 == error.response.status) window.location.href = '/'
                     })
-			}
+			},
+            getPosts(username) {
+	            axios.get(`/api/user/posts/${username}`)
+		            .then((response) => {console.log(response); this.posts = response.data})
+		            .catch((error) =>  {
+			            if (500 == error.response.status) window.location.href = '/'
+		            })
+            }
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
 			let username = url.slice(url.length-1);
 			this.getUser(username);
+			this.getPosts(username);
 		}
 	}
 </script>

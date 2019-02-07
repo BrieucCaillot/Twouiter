@@ -24,11 +24,11 @@
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
+                                <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -42,10 +42,10 @@
                                     <h1 class="is-size-4">Quoi de neuf ?</h1>
                                 </div>
                                 <div class="level">
-                                    <input class="input" type="text" v-model="message" placeholder="Quoi de neuf ?">
+                                    <textarea class="textarea" rows="2" type="text" v-model="message" placeholder="Whats up ?"></textarea>
                                 </div>
                                 <div class="level">
-                                    <button class="button background-color-primary has-text-white" type="submit">Tweet</button>
+                                    <button class="button background-color-primary has-text-white" type="submit">Send</button>
                                 </div>
                             </form>
                         </div>
@@ -104,7 +104,7 @@
 					.catch((error) => console.log(error))
 			},
 			getUser() {
-				axios.get('/api/test')
+				axios.get('/api/userc')
 					.then((response) => this.user = response.data)
 					.catch((error) => console.log(error))
 			},

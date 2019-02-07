@@ -31,11 +31,12 @@
                                     <span>{{ user.countPosts }}</span>
                                 </div>
                                 <div class="level">
-                                    <a class="has-text-white" :href=" `/user/${user.username}/followings` ">Abonnements</a>
+                                    <a class="has-text-white"
+                                       :href=" `/user/${user.username}/followings` ">Followings</a>
                                     <span>{{ user.countFollowings }}</span>
                                 </div>
                                 <div class="level">
-                                    <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Abonnés</a>
+                                    <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Followers</a>
                                     <span>{{ user.countFollowers }}</span>
                                 </div>
                             </div>
@@ -75,6 +76,9 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else>
+                        No followers
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,26 +92,26 @@
 			return {
 				user: '',
 				followers: ''
-            }
+			}
 		},
 		methods: {
 			getUser(username) {
-				axios.get(`/api/test/${username}`)
+				axios.get(`/api/userc/${username}`)
 					.then((response) => this.user = response.data)
-					.catch((error) =>  {
+					.catch((error) => {
 						if (500 == error.response.status) window.location.href = '/'
-                    })
+					})
 			},
-            getFollowers(username) {
-				axios.get(`/api/userf2/${username}/followers`)
-                    .then((response) => {
-                    	console.log(response);
-                    	this.followers = response.data
-                    })
-                    .catch((error) => {
-	                    if (500 == error.response.status) window.location.href = '/'
-                    })
-            }
+			getFollowers(username) {
+				axios.get(`/api/user/followers/${username}`)
+					.then((response) => {
+						console.log(response);
+						this.followers = response.data
+					})
+					.catch((error) => {
+						if (500 == error.response.status) window.location.href = '/'
+					})
+			}
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
