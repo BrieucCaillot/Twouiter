@@ -57,6 +57,9 @@ class ApiController extends PostController
         if ($username !== null) {
             $user = User::where('username', 'like', $username)->first();
             $userFollowings = $user->followings;
+            foreach ($userFollowings as $userFollow) {
+                $userFollow->user = User::find($userFollow->user_id);
+            }
         } else {
             $user = Auth::user();
             $userFollowings = $user->followings;

@@ -2,47 +2,7 @@
     <main id="content" class="user posts background-color-primary has-text-white">
         <div class="container is-fluid">
             <div class="columns is-multiline">
-                <div class="column user__profile is-3 is-12-touch background-color-secondary">
-                    <div class="columns mg-t1">
-                        <div class="column user__profile__top">
-                            <div class="user__profile__top__img"
-                                 style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
-                        </div>
-                    </div>
-                    <div class="columns is-vcentered is-flex">
-                        <div class="user__right column">
-                            <div class="level is-mobile user__profile__username">
-                                <a class="has-text-white full-w has-text-centered is-size-4"
-                                   :href="/user/ + user.username">
-                                    <strong>{{ user.name }}</strong>
-                                </a>
-                            </div>
-                            <div class="level has-text-centered">
-                                <p class="full-w has-text-center">@{{ user.username }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="columns">
-                        <div class="column">
-                            <div class="column">
-                                <div class="level">
-                                    <a class="has-text-white" :href=" `/user/${user.username}` ">Tweets</a>
-                                    <span>{{ user.countPosts }}</span>
-                                </div>
-                                <div class="level">
-                                    <a class="has-text-white"
-                                       :href=" `/user/${user.username}/followings` ">Followings</a>
-                                    <span>{{ user.countFollowings }}</span>
-                                </div>
-                                <div class="level">
-                                    <a class="has-text-white" :href=" `/user/${user.username}/followers` ">Followers</a>
-                                    <span>{{ user.countFollowers }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <UserRecapComponent :user="user"></UserRecapComponent>
                 <div class="column is-6 is-12-touch posts__center">
                     <div class="columns">
                         <div class="column">
@@ -53,29 +13,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="followers.length > 0" class="columns is-multiline">
-                        <div v-for="follower in followers" class="column is-12">
-                            <div class="posts__post mg-t1 has-background-white columns is-flex">
-                                <div class="column posts__post__left">
-                                    <a :href="/user/ + follower.username">
-                                        <div class="posts__post__left__img"
-                                             style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
-                                    </a>
-                                </div>
-
-                                <div class="column posts__post__right">
-                                    <div class="level is-mobile posts__post__right__top has-text-left">
-                                        <div class="level-left">
-                                            <a :href="/user/ + follower.username">
-                                                <strong class="posts__post__right__name">{{ follower.name }}</strong>
-                                            </a>
-                                            <span class="posts__post__right__username">@{{ follower.username }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <FollowComponent v-if="user.followers.length > 0" v-for="follower in user.followers" :key="follower.id" :post="follower"></FollowComponent>
                     <div v-else>
                         No followers
                     </div>
@@ -86,12 +24,21 @@
 </template>
 
 <script>
+
+	import UserRecapComponent from '../Common/UserRecapComponent';
+	import FollowComponent from '../Common/FollowComponent';
+
 	export default {
 		name: "FollowersComponent",
+		components: {
+			UserRecapComponent,
+			FollowComponent
+		},
 		data() {
 			return {
-				user: '',
-				followers: ''
+				user: {
+					followers: ''
+				},
 			}
 		},
 		methods: {
@@ -101,23 +48,12 @@
 					.catch((error) => {
 						if (500 == error.response.status) window.location.href = '/'
 					})
-			},
-			getFollowers(username) {
-				axios.get(`/api/user/followers/${username}`)
-					.then((response) => {
-						console.log(response);
-						this.followers = response.data
-					})
-					.catch((error) => {
-						if (500 == error.response.status) window.location.href = '/'
-					})
 			}
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
 			let username = url.slice(4, 5);
 			this.getUser(username);
-			this.getFollowers(username);
 		}
 	}
 </script>

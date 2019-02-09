@@ -35,49 +35,8 @@
                     </div>
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
-                    <div class="posts__newpost columns background-color-secondary has-text-white">
-                        <div class="column">
-                            <form @submit.prevent="newTweet()" method="POST">
-                                <div class="level">
-                                    <h1 class="is-size-4">Quoi de neuf ?</h1>
-                                </div>
-                                <div class="level">
-                                    <textarea class="textarea" rows="2" type="text" v-model="message" placeholder="Whats up ?"></textarea>
-                                </div>
-                                <div class="level">
-                                    <button class="button background-color-primary has-text-white" type="submit">Send</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div v-if="user.posts.length > 0" class="columns">
-                        <div class="column">
-                            <div v-for="post in allPosts" class="posts__post mg-t1 has-background-white columns is-flex">
-                                <div class="column posts__post__left">
-                                    <a :href="/user/ + post.user.username">
-                                    <div class="posts__post__left__img"
-                                         style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
-                                    </a>
-                                </div>
-                                <div class="column posts__post__right">
-                                    <div class="level is-mobile posts__post__right__top has-text-left">
-                                        <div class="level-left">
-                                            <a :href="/user/ + post.user.username">
-                                                <strong class="posts__post__right__name">{{ post.user.name }}</strong>
-                                            </a>
-                                            <span class="posts__post__right__username">@{{ post.user.username }}</span>
-                                        </div>
-                                        <div class="level-right">
-                                            <span class="posts__post__right__date is-size-7">{{ post.human_date }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="level">
-                                        <p class="has-text-black posts__post__right__content">{{ post.content }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <NewTweetComponent></NewTweetComponent>
+                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post"></PostComponent>
                 </div>
             </div>
         </div>
@@ -85,11 +44,19 @@
 </template>
 
 <script>
+
+    import NewTweetComponent from './NewTweetComponent';
+    import PostComponent from '../Common/PostComponent';
+
 	export default {
+
 		name: "Posts",
+        components: {
+	        NewTweetComponent,
+		    PostComponent
+        },
 		data() {
 			return {
-				message: '',
 				user: {
 					posts: '',
 					countPosts: ''
@@ -108,22 +75,6 @@
 					.then((response) => this.user = response.data)
 					.catch((error) => console.log(error))
 			},
-			newTweet() {
-				if (this.message.length > 0) {
-					axios.post('/post', {
-						message: this.message
-					})
-						.then((response) => {
-							if (response.status == 200) {
-								this.getPosts();
-								this.user.countPosts++
-                            };
-						})
-						.catch((error) => {
-							console.log(error);
-						})
-				}
-			}
 		},
 		beforeMount() {
 			this.getUser()
