@@ -40,42 +40,19 @@ class ApiController extends PostController
         if ($username !== null) {
             $user = User::where('username', 'like', $username)->first();
             $userPosts = $user->posts;
-
             foreach ($userPosts as $post) {
                 $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
                 $post->user = User::find($post->user_id);
             }
+
         } else {
             $user = Auth::user();
             $userPosts = $user->posts;
+            foreach ($userPosts as $post) {
+                $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
+                $post->user = User::find($post->user_id);
+            }
         }
         return $userPosts;
-    }
-
-    public function followings($username = null)
-    {
-        if ($username !== null) {
-            $user = User::where('username', 'like', $username)->first();
-            $userFollowings = $user->followings;
-            foreach ($userFollowings as $userFollow) {
-                $userFollow->user = User::find($userFollow->user_id);
-            }
-        } else {
-            $user = Auth::user();
-            $userFollowings = $user->followings;
-        }
-        return $userFollowings;
-    }
-
-    public function followers($username = null)
-    {
-        if ($username !== null) {
-            $user = User::where('username', 'like', $username)->first();
-            $userFollowers = $user->followers;
-        } else {
-            $user = Auth::user();
-            $userFollowers = $user->followers;
-        }
-        return $userFollowers;
     }
 }

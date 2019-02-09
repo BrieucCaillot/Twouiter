@@ -15,22 +15,19 @@ use Illuminate\Support\Facades\Auth;
 
 Route::middleware('web')->group(function () {
     Auth::routes();
+    Route::get('/user/{username}', 'UserController@index');
+    // @TODO NOT WORKING WHEN NOT CONNECTED - 401 UNAUTHORIZED
+    Route::get('api/userc/{username?}', 'ApiController@user');
+    Route::get('/user', function () { return redirect()->route('home'); });
 });
 
 Route::middleware('auth')->group(function () {
 
-    // Redirect to view
     Route::get('/', 'PostController@index')->name('home');
-    Route::get('/user/{username}', 'UserController@index');
-    Route::get('/user/{username}/followings', 'UserController@followings');
-    Route::get('/user/{username}/followers', 'UserController@followers');
-    Route::get('/user', function () { return redirect()->route('home'); });
 
     Route::prefix('api')->group(function () {
         Route::get('userc/{username?}', 'ApiController@user');
         Route::get('user/posts/{username?}', 'ApiController@posts');
-        Route::get('user/followers/{username?}', 'ApiController@followers');
-        Route::get('user/followings/{username?}',  'ApiController@followings');
         Route::get('allposts', 'ApiController@allPosts');
     });
 

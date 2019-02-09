@@ -1,9 +1,9 @@
 <template>
-    <div class="posts__newpost columns background-color-secondary has-text-white">
+    <div class="posts__newpost columns has-background-white has-text-white">
         <div class="column">
             <form @submit.prevent="newTweet()" method="POST">
                 <div class="level">
-                    <h1 class="is-size-4">Quoi de neuf ?</h1>
+                    <h1 class="is-size-4 has-text-black">Quoi de neuf ?</h1>
                 </div>
                 <div class="level">
                     <textarea class="textarea" rows="2" type="text" v-model="message" placeholder="Whats up ?"></textarea>

@@ -24,8 +24,6 @@ Vue.component('register-component', require('./components/Auth/RegisterComponent
 Vue.component('login-component', require('./components/Auth/LoginComponent').default);
 Vue.component('posts-component', require('./components/Post/PostsComponent').default);
 Vue.component('user-component', require('./components/User/UserComponent').default);
-Vue.component('following-component', require('./components/User/FollowingComponent').default);
-Vue.component('followers-component', require('./components/User/FollowersComponent').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

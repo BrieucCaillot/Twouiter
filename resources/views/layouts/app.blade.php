@@ -18,7 +18,7 @@
 </head>
 <body>
 <header class="over-hide">
-    <nav class="navbar is-fixed-top background-color-secondary" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-fixed-top has-background-white" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a href="/" class="navbar-item">
@@ -38,12 +38,14 @@
                     @guest
                         <div class="navbar-item">
                             <div class="buttons">
-                                <a href="{{ route('login') }}" class="button is-light">
+                                @if (Route::has('login'))
+                                <a href="{{ route('login') }}" class="{{ Request::path() ==  'login' ? 'background-color-primary has-text-white ' : 'is-light' }} button">
                                     {{ __('Login') }}
                                 </a>
+                                @endif
                                 @if (Route::has('register'))
                                     <a href="{{ route('register') }}"
-                                       class="button background-color-primary has-text-white">
+                                       class="{{ Request::path() ==  'register' ? 'background-color-primary has-text-white ' : 'is-light' }} button">
                                         {{ __('Register') }}
                                     </a>
                                 @endif
@@ -51,7 +53,7 @@
                         </div>
                     @else
                         <div class="navbar-item">
-                            <a href="/user/{{ Auth::user()->username }}" class="has-text-white pd-r2" href="#">
+                            <a href="/user/{{ Auth::user()->username }}" class="has-text-black pd-r2" href="#">
                                 {{ Auth::user()->name }}
                             </a>
                             <a class="button background-color-primary has-text-white"
