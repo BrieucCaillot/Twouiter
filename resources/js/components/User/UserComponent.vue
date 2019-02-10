@@ -12,13 +12,24 @@
                     <div class="columns is-vcentered is-flex">
                         <div class="user__right column">
                             <div class="level is-mobile user__profile__username">
-                                <a class="has-text-black full-w has-text-centered is-size-4"
+                                <a class="has-text-black mauto has-text-centered is-size-4"
                                    :href="/user/ + user.username">
                                     <strong>{{ user.name }}</strong>
                                 </a>
                             </div>
                             <div class="level has-text-centered">
-                                <p class="full-w has-text-center">@{{ user.username }}</p>
+                                <span class="mauto has-text-center">@{{ user.username }}</span>
+                            </div>
+                            <div class="level is-mobile">
+                                <button v-if="userIdConnected == user.id"
+                                        class="button background-color-primary has-text-white mauto">Edit Profile
+                                </button>
+                                <button v-else-if="isFollowable" @click="changeFollow('follow')"
+                                        class="button is-success has-text-white mauto">{{ followtext }}
+                                </button>
+                                <button v-else-if="!isFollowable" @click="changeFollow('unfollow')"
+                                        class="button is-danger has-text-white mauto">{{ followtext }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -30,11 +41,13 @@
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a @click="changeView($event)" data-type="followings" class="has-text-black">Followings</a>
+                                <a @click="changeView($event)" data-type="followings"
+                                   class="has-text-black">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a @click="changeView($event)" data-type="followers" class="has-text-black">Followers</a>
+                                <a @click="changeView($event)" data-type="followers"
+                                   class="has-text-black">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -50,9 +63,14 @@
                             </div>
                         </div>
                     </div>
-                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id" :post="post" :user="post.user" :userIdConnected="user.id"></PostComponent>
-                    <FollowComponent v-if="selected.followings && user.followings.length > 0" v-for="following in user.followings" :key="following.id" :post="following"></FollowComponent>
-                    <FollowComponent v-if="selected.followers && user.followers.length > 0" v-for="follower in user.followers" :key="follower.id" :post="follower"></FollowComponent>
+                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id"
+                                   :post="post" :user="post.user" :userIdConnected="userIdConnected"></PostComponent>
+                    <FollowComponent v-if="selected.followings && user.followings.length > 0"
+                                     v-for="following in user.followings" :key="following.id"
+                                     :post="following"></FollowComponent>
+                    <FollowComponent v-if="selected.followers && user.followers.length > 0"
+                                     v-for="follower in user.followers" :key="follower.id"
+                                     :post="follower"></FollowComponent>
                 </div>
             </div>
         </div>
@@ -61,75 +79,99 @@
 
 <script>
 
-    import UserRecapComponent from '../Common/UserRecapComponent';
-    import PostComponent from '../Common/PostComponent';
-    import FollowComponent from '../Common/FollowComponent';
+	import PostComponent from '../Common/PostComponent';
+	import FollowComponent from '../Common/FollowComponent';
 
 	export default {
 		name: "UserComponent",
-        components: {
-	        UserRecapComponent,
-		    PostComponent,
-	        FollowComponent
-        },
+		props: ['userIdConnected'],
+		components: {
+			PostComponent,
+			FollowComponent
+		},
 		data() {
 			return {
+				username: '',
 				user: {
 					followers: '',
 					followings: ''
-                },
-                posts: '',
+				},
+				posts: '',
 				title: 'Latest tweets',
+				followtext: '',
 				selected: {
-                    tweets: true,
-                    followings: false,
-                    followers: false,
+					tweets: true,
+					followings: false,
+					followers: false,
+				}
+			}
+		},
+		computed: {
+			isFollowable() {
+				if (this.user.followers.length > 0) {
+					for (let user in this.user.followers) {
+						if (this.user.followers[user].id == this.userIdConnected) {
+							this.followtext = "Unfollow"
+                            return false;
+                        }
+						this.followtext = "Follow";
+						return true;
+					}
                 }
-            }
+				this.followtext = "Follow";
+				return true;
+			},
 		},
 		methods: {
 			getUser(username) {
 				axios.get(`/api/userc/${username}`)
 					.then((response) => this.user = response.data)
-					.catch((error) =>  {
+					.catch((error) => {
 						if (500 == error.response.status) window.location.href = '/'
 					})
 			},
 			getPosts(username) {
 				axios.get(`/api/user/posts/${username}`)
-					.then((response) => {console.log(response); this.posts = response.data})
-					.catch((error) =>  {
+					.then((response) => this.posts = response.data)
+					.catch((error) => {
 						if (500 == error.response.status) window.location.href = '/'
 					})
 			},
-            resetView(type) {
-			    for (let view in this.selected) {
-				    this.selected[view] = false
-                    this.selected[type] = true
-			    }
-            },
-            changeView(event) {
+			changeFollow(followtype) {
+				axios.post(`/api/user/${followtype}`, {
+					userId: this.user.id
+				})
+					.then((response) => this.getUser(this.username))
+					.catch((error) => console.log(error))
+			},
+			resetView(type) {
+				for (let view in this.selected) {
+					this.selected[view] = false
+					this.selected[type] = true
+				}
+			},
+			changeView(event) {
 				switch (event.target.getAttribute('data-type')) {
-                    case "tweets":
-	                    this.title = "Latest tweets";
-                        this.resetView("tweets");
-	                    break;
+					case "tweets":
+						this.title = "Latest tweets";
+						this.resetView("tweets");
+						break;
 					case "followings":
 						this.title = "Followings";
 						this.resetView("followings");
 						break;
-                    case "followers":
+					case "followers":
 						this.title = "Followers";
 						this.resetView("followers");
 						break;
-                }
-            }
+				}
+			}
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
-			let username = url.slice(url.length-1);
-			this.getUser(username);
-			this.getPosts(username);
+			this.username = url.slice(url.length - 1);
+			this.getUser(this.username);
+			this.getPosts(this.username);
 		}
 	}
 </script>

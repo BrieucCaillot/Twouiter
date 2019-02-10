@@ -20,15 +20,15 @@
                     <div class="columns posts__user has-background-white has-text-black mg-t2">
                         <div class="column">
                             <div class="level">
-                                <a class="has-text-black" :href=" `/user/${user.username}` ">Tweets</a>
+                                <span class="has-text-black">Tweets</span>
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-black" :href=" `/user/${user.username}` ">Followings</a>
+                                <span class="has-text-black">Followings</span>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-black" :href=" `/user/${user.username}` ">Followers</a>
+                                <span class="has-text-black">Followers</span>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -62,7 +62,6 @@
     import PostComponent from '../Common/PostComponent';
 
 	export default {
-
 		name: "Posts",
         components: {
 		    PostComponent
@@ -70,10 +69,7 @@
 		data() {
 			return {
 				message: '',
-				user: {
-					posts: '',
-					countPosts: ''
-                },
+				user: '',
 				allPosts: ''
 			}
 		},
@@ -85,8 +81,8 @@
 					})
 						.then((response) => {
 							if (response.status == 200) {
+								this.getUser();
 								this.getPosts();
-								this.user.countPosts++
 							};
 						})
 						.catch((error) => {

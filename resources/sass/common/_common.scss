@@ -29,6 +29,10 @@ $secondary: #111;
   height: 100%;
 }
 
+.mauto {
+  margin: 0 auto;
+}
+
 @for $i from 0 through 10 {
   .mg#{$i} {
     margin: 10px*$i;
@@ -77,11 +81,4 @@ main#content {
 
 .label {
   font-weight: normal;
-}
-
-.button {
-  border-radius: 50px;
-  border: none;
-  padding: 20px 40px;
-  line-height: 0px;
 }

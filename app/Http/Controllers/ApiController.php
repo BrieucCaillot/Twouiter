@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use Carbon\Carbon;
 use App\User;
+use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ApiController extends PostController

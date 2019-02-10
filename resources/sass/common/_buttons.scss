@@ -1,0 +1,16 @@
+.button {
+  border-radius: 50px;
+  border: none;
+  padding: 20px 40px;
+  line-height: 0px;
+
+  &:focus {
+    box-shadow: none !important;
+  }
+
+  &.is-success {
+    &:hover {
+      background-color: #23B960;
+    }
+  }
+}

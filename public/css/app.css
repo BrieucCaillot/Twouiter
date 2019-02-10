@@ -11325,6 +11325,10 @@ body {
   height: 100%;
 }
 
+.mauto {
+  margin: 0 auto;
+}
+
 .mg0 {
   margin: 0px;
 }
@@ -11827,5 +11831,13 @@ main#content {
   border: none;
   padding: 20px 40px;
   line-height: 0px;
+}
+
+.button:focus {
+  box-shadow: none !important;
+}
+
+.button.is-success:hover {
+  background-color: #23B960;
 }
 

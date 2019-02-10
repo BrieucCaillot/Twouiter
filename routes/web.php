@@ -24,16 +24,15 @@ Route::middleware('web')->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/', 'PostController@index')->name('home');
+    Route::post('/post', 'PostController@store');
 
     Route::prefix('api')->group(function () {
         Route::get('userc/{username?}', 'ApiController@user');
         Route::get('user/posts/{username?}', 'ApiController@posts');
         Route::get('user/delete-post/{postId}', 'ApiController@deletePost');
+        Route::post('user/follow', 'UserController@follow');
+        Route::post('user/unfollow', 'UserController@unfollow');
         Route::get('allposts', 'ApiController@allPosts');
     });
 
-//    Route::post('profile/{profileId}/follow', 'ProfileController@followUser')->name('user.follow');
-//    Route::post('/{profileId}/unfollow', 'ProfileController@unFollowUser')->name('user.unfollow');
-
-    Route::post('/post', 'PostController@store');
 });

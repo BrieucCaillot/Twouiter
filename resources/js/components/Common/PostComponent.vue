@@ -2,7 +2,7 @@
     <div class="columns">
         <div class="column">
             <div class="posts__post mg-t1 has-background-white columns is-flex"
-                 :class="(userIdConnected == user.id) ? 'posts__post__delete' : null">
+                 :class="(userIdConnected == user.id) ? 'posts__post__delete' : 'unauthorized'">
                 <a href="void:javascript()" @click="deleteTweet($event)" class="delete-post"></a>
                 <div class="column posts__post__left">
                     <a :href="/user/ + user.username">
