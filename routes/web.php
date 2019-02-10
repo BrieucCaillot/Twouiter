@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('api')->group(function () {
         Route::get('userc/{username?}', 'ApiController@user');
         Route::get('user/posts/{username?}', 'ApiController@posts');
+        Route::get('user/delete-post/{postId}', 'ApiController@deletePost');
         Route::get('allposts', 'ApiController@allPosts');
     });
 

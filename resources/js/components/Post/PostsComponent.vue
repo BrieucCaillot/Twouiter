@@ -50,7 +50,7 @@
                             </form>
                         </div>
                     </div>
-                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user"></PostComponent>
+                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user" :userIdConnected="user.id"></PostComponent>
                 </div>
             </div>
         </div>

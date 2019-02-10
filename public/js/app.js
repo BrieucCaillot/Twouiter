@@ -2049,11 +2049,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostComponent",
-  props: ['post', 'user']
+  props: ['post', 'user', 'userIdConnected'],
+  methods: {
+    deleteTweet: function deleteTweet(event) {
+      axios.get("/api/user/delete-post/".concat(this.post.id)).then(function (response) {
+        return console.log(response);
+      }).then(function () {
+        event.target.parentNode.parentNode.parentNode.remove();
+      }).catch(function (error) {
+        return console.log(error);
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -33553,75 +33562,76 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "columns" }, [
     _c("div", { staticClass: "column" }, [
-      _c("div", { staticClass: "columns" }, [
-        _c("div", { staticClass: "column" }, [
-          _c(
-            "div",
-            {
-              staticClass:
-                "posts__post mg-t1 has-background-white columns is-flex"
-            },
-            [
-              _c("div", { staticClass: "column posts__post__left" }, [
-                _c("a", { attrs: { href: /user/ + _vm.user.username } }, [
-                  _c("div", {
-                    staticClass: "posts__post__left__img",
-                    staticStyle: {
-                      background:
-                        "url('https://via.placeholder.com/150') no-repeat center center"
-                    }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "column posts__post__right" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "level is-mobile posts__post__right__top has-text-left"
-                  },
-                  [
-                    _c("div", { staticClass: "level-left" }, [
-                      _c("a", { attrs: { href: /user/ + _vm.user.username } }, [
-                        _c(
-                          "strong",
-                          { staticClass: "posts__post__right__name" },
-                          [_vm._v(_vm._s(_vm.user.name))]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        { staticClass: "posts__post__right__username" },
-                        [_vm._v("@" + _vm._s(_vm.user.username))]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level-right" }, [
-                      _c(
-                        "span",
-                        { staticClass: "posts__post__right__date is-size-7" },
-                        [_vm._v(_vm._s(_vm.post.human_date))]
-                      )
+      _c(
+        "div",
+        {
+          staticClass: "posts__post mg-t1 has-background-white columns is-flex",
+          class:
+            _vm.userIdConnected == _vm.user.id ? "posts__post__delete" : null
+        },
+        [
+          _c("a", {
+            staticClass: "delete-post",
+            attrs: { href: "void:javascript()" },
+            on: {
+              click: function($event) {
+                _vm.deleteTweet($event)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "column posts__post__left" }, [
+            _c("a", { attrs: { href: /user/ + _vm.user.username } }, [
+              _c("div", {
+                staticClass: "posts__post__left__img",
+                staticStyle: {
+                  background:
+                    "url('https://via.placeholder.com/150') no-repeat center center"
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "column posts__post__right" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "level is-mobile posts__post__right__top has-text-left"
+              },
+              [
+                _c("div", { staticClass: "level-left" }, [
+                  _c("a", { attrs: { href: /user/ + _vm.user.username } }, [
+                    _c("strong", { staticClass: "posts__post__right__name" }, [
+                      _vm._v(_vm._s(_vm.user.name))
                     ])
-                  ]
-                ),
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "posts__post__right__username" }, [
+                    _vm._v("@" + _vm._s(_vm.user.username))
+                  ])
+                ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "level" }, [
+                _c("div", { staticClass: "level-right" }, [
                   _c(
-                    "p",
-                    {
-                      staticClass: "has-text-black posts__post__right__content"
-                    },
-                    [_vm._v(_vm._s(_vm.post.content))]
+                    "span",
+                    { staticClass: "posts__post__right__date is-size-7" },
+                    [_vm._v(_vm._s(_vm.post.human_date))]
                   )
                 ])
-              ])
-            ]
-          )
-        ])
-      ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "level" }, [
+              _c(
+                "p",
+                { staticClass: "has-text-black posts__post__right__content" },
+                [_vm._v(_vm._s(_vm.post.content))]
+              )
+            ])
+          ])
+        ]
+      )
     ])
   ])
 }
@@ -33929,7 +33939,11 @@ var render = function() {
               _vm._l(_vm.allPosts, function(post) {
                 return _c("PostComponent", {
                   key: post.id,
-                  attrs: { post: post, user: post.user }
+                  attrs: {
+                    post: post,
+                    user: post.user,
+                    userIdConnected: _vm.user.id
+                  }
                 })
               })
             ],
@@ -34005,7 +34019,7 @@ var render = function() {
   return _c(
     "main",
     {
-      staticClass: "user posts background-color-primary has-text-white",
+      staticClass: "user posts background-color-primary has-text-black",
       attrs: { id: "content" }
     },
     [
@@ -34015,7 +34029,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "column user__profile full-h is-3 is-12-touch background-color-secondary"
+                "column user__profile full-h is-3 is-12-touch has-background-white"
             },
             [
               _vm._m(0),
@@ -34030,7 +34044,7 @@ var render = function() {
                         "a",
                         {
                           staticClass:
-                            "has-text-white full-w has-text-centered is-size-4",
+                            "has-text-black full-w has-text-centered is-size-4",
                           attrs: { href: /user/ + _vm.user.username }
                         },
                         [_c("strong", [_vm._v(_vm._s(_vm.user.name))])]
@@ -34054,7 +34068,7 @@ var render = function() {
                     _c(
                       "a",
                       {
-                        staticClass: "has-text-white",
+                        staticClass: "has-text-black",
                         attrs: { "data-type": "tweets" },
                         on: {
                           click: function($event) {
@@ -34072,7 +34086,7 @@ var render = function() {
                     _c(
                       "a",
                       {
-                        staticClass: "has-text-white",
+                        staticClass: "has-text-black",
                         attrs: { "data-type": "followings" },
                         on: {
                           click: function($event) {
@@ -34090,7 +34104,7 @@ var render = function() {
                     _c(
                       "a",
                       {
-                        staticClass: "has-text-white",
+                        staticClass: "has-text-black",
                         attrs: { "data-type": "followers" },
                         on: {
                           click: function($event) {
@@ -34133,7 +34147,11 @@ var render = function() {
                 return _vm.selected.tweets && _vm.posts.length > 0
                   ? _c("PostComponent", {
                       key: post.id,
-                      attrs: { post: post, user: post.user }
+                      attrs: {
+                        post: post,
+                        user: post.user,
+                        userIdConnected: _vm.user.id
+                      }
                     })
                   : _vm._e()
               }),

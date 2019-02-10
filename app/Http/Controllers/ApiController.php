@@ -60,4 +60,9 @@ class ApiController extends PostController
         }
         return $userPosts;
     }
+
+    public function deletePost($postId) {
+        $post = Post::where('id', 'like', $postId)->delete();
+        return $post;
+    }
 }

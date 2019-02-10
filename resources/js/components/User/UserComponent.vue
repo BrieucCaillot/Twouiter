@@ -1,8 +1,8 @@
 <template>
-    <main id="content" class="user posts background-color-primary has-text-white">
+    <main id="content" class="user posts background-color-primary has-text-black">
         <div class="container is-fluid">
             <div class="columns is-multiline">
-                <div class="column user__profile full-h is-3 is-12-touch background-color-secondary">
+                <div class="column user__profile full-h is-3 is-12-touch has-background-white">
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
@@ -12,7 +12,7 @@
                     <div class="columns is-vcentered is-flex">
                         <div class="user__right column">
                             <div class="level is-mobile user__profile__username">
-                                <a class="has-text-white full-w has-text-centered is-size-4"
+                                <a class="has-text-black full-w has-text-centered is-size-4"
                                    :href="/user/ + user.username">
                                     <strong>{{ user.name }}</strong>
                                 </a>
@@ -26,15 +26,15 @@
                     <div class="columns">
                         <div class="column">
                             <div class="level">
-                                <a @click="changeView($event)" data-type="tweets" class="has-text-white">Tweets</a>
+                                <a @click="changeView($event)" data-type="tweets" class="has-text-black">Tweets</a>
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a @click="changeView($event)" data-type="followings" class="has-text-white">Followings</a>
+                                <a @click="changeView($event)" data-type="followings" class="has-text-black">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a @click="changeView($event)" data-type="followers" class="has-text-white">Followers</a>
+                                <a @click="changeView($event)" data-type="followers" class="has-text-black">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                     </div>
-                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id" :post="post" :user="post.user"></PostComponent>
+                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id" :post="post" :user="post.user" :userIdConnected="user.id"></PostComponent>
                     <FollowComponent v-if="selected.followings && user.followings.length > 0" v-for="following in user.followings" :key="following.id" :post="following"></FollowComponent>
                     <FollowComponent v-if="selected.followers && user.followers.length > 0" v-for="follower in user.followers" :key="follower.id" :post="follower"></FollowComponent>
                 </div>

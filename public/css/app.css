@@ -11231,7 +11231,17 @@ label.panel-block:hover {
 }
 
 .posts__post {
+  position: relative;
   border-radius: 8px;
+}
+
+.posts__post__delete .delete-post {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  background: url("/images/error.svg") no-repeat center center/contain;
+  height: 20px;
+  width: 20px;
 }
 
 .posts__post__left {
