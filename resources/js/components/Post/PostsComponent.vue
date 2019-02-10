@@ -24,18 +24,32 @@
                                 <span>{{ user.countPosts }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-black" :href=" `/user/${user.username}/followings` ">Followings</a>
+                                <a class="has-text-black" :href=" `/user/${user.username}` ">Followings</a>
                                 <span>{{ user.countFollowings }}</span>
                             </div>
                             <div class="level">
-                                <a class="has-text-black" :href=" `/user/${user.username}/followers` ">Followers</a>
+                                <a class="has-text-black" :href=" `/user/${user.username}` ">Followers</a>
                                 <span>{{ user.countFollowers }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
-                    <NewTweetComponent></NewTweetComponent>
+                    <div class="posts__newpost columns has-background-white has-text-white">
+                        <div class="column">
+                            <form @submit.prevent="newTweet()" method="POST">
+                                <div class="level">
+                                    <h1 class="is-size-4 has-text-black">Quoi de neuf ?</h1>
+                                </div>
+                                <div class="level">
+                                    <textarea class="textarea" rows="2" type="text" v-model="message" placeholder="Whats up ?"></textarea>
+                                </div>
+                                <div class="level">
+                                    <button class="button background-color-primary has-text-white" type="submit">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user"></PostComponent>
                 </div>
             </div>
@@ -45,18 +59,17 @@
 
 <script>
 
-    import NewTweetComponent from './NewTweetComponent';
     import PostComponent from '../Common/PostComponent';
 
 	export default {
 
 		name: "Posts",
         components: {
-	        NewTweetComponent,
 		    PostComponent
         },
 		data() {
 			return {
+				message: '',
 				user: {
 					posts: '',
 					countPosts: ''
@@ -65,6 +78,22 @@
 			}
 		},
 		methods: {
+			newTweet() {
+				if (this.message.length > 0) {
+					axios.post('/post', {
+						message: this.message
+					})
+						.then((response) => {
+							if (response.status == 200) {
+								this.getPosts();
+								this.user.countPosts++
+							};
+						})
+						.catch((error) => {
+							console.log(error);
+						})
+				}
+			},
 			getUser() {
 				axios.get('/api/userc')
 					.then((response) => this.user = response.data)
@@ -74,7 +103,7 @@
 				axios.get('/api/allposts')
 					.then((response) => {
 						console.log(response)
-						this.allPosts = response.data.data
+						this.allPosts = response.data
                     })
 					.catch((error) => console.log(error))
 			}

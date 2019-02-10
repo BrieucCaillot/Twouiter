@@ -11292,7 +11292,7 @@ body {
 }
 
 .color-secondary {
-  color: #FFAB00;
+  color: #111;
 }
 
 .background-color-primary {
@@ -11300,7 +11300,7 @@ body {
 }
 
 .background-color-secondary {
-  background-color: #FFAB00;
+  background-color: #111;
 }
 
 .over-hide {
@@ -11802,6 +11802,10 @@ body {
 main#content {
   min-height: 100vh;
   margin-top: 56px;
+}
+
+.navbar {
+  box-shadow: 0 -6px 32px -2px grey;
 }
 
 .label {

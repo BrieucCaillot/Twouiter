@@ -11,7 +11,12 @@ class ApiController extends PostController
 {
     public function allPosts()
     {
-        $posts = Post::orderBy('created_at', 'DESC')->paginate(10);
+        $id = Auth::id();
+        $posts = Post::whereIn('user_id', function ($query) use ($id) {
+            $query->select('user_id')
+                ->from('followers')
+                ->where('follower_id', $id);
+        })->orWhere('user_id', $id)->latest()->get();
         foreach ($posts as $post) {
             $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
             $post->user = User::find($post->user_id);

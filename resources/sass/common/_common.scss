@@ -2,7 +2,7 @@ html, body {
   height: 100%;
 }
 $primary: #0044B2;
-$secondary: #FFAB00;
+$secondary: #111;
 
 .color-primary {
   color: $primary
@@ -69,6 +69,10 @@ $secondary: #FFAB00;
 main#content {
   min-height: 100vh;
   margin-top: 56px;
+}
+
+.navbar {
+  box-shadow: 0 -6px 32px -2px grey;
 }
 
 .label {
