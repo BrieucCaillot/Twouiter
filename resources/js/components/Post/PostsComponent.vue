@@ -107,6 +107,9 @@
 		beforeMount() {
 			this.getUser()
 			this.getPosts()
+            setInterval(() => {
+	            this.getPosts()
+            }, 60000)
 		}
 	}
 </script>

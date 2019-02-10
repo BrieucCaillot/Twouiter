@@ -9,11 +9,38 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('user.user');
     }
 
+    /**
+     * @param null $username
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function user($username = null)
+    {
+        if ($username !== null) {
+            $user = User::where('username', 'like', $username)->first();
+            $user->countPosts = $user->posts->count();
+            $user->countFollowings = $user->followings->count();
+            $user->countFollowers = $user->followers->count();
+        } else {
+            $user = Auth::user();
+            $user->countPosts = $user->posts->count();
+            $user->countFollowings = $user->followings->count();
+            $user->countFollowers = $user->followers->count();
+        }
+        return $user;
+    }
+
+    /**
+     * @param Follower $follower
+     * @param Request $request
+     */
     public function follow(Follower $follower, Request $request) {
         $request->validate([
             'userId' => 'required'
@@ -24,6 +51,10 @@ class UserController extends Controller
         $follower->save();
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function unfollow(Request $request) {
         $request->validate([
             'userId' => 'required'

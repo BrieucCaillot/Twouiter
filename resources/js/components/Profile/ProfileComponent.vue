@@ -21,15 +21,7 @@
                                 <span class="mauto has-text-center">@{{ user.username }}</span>
                             </div>
                             <div class="level is-mobile">
-                                <a :href="`/user/${username}/profile`" v-if="userIdConnected == user.id"
-                                   class="button background-color-primary has-text-white mauto">Edit Profile
-                                </a>
-                                <button v-else-if="isFollowable" @click="changeFollow('follow')"
-                                        class="button is-success has-text-white mauto">{{ followtext }}
-                                </button>
-                                <button v-else-if="!isFollowable" @click="changeFollow('unfollow')"
-                                        class="button is-danger has-text-white mauto">{{ followtext }}
-                                </button>
+                                <button class="button is-success has-text-white mauto">Save</button>
                             </div>
                         </div>
                     </div>
@@ -58,19 +50,12 @@
                         <div class="column">
                             <div class="level">
                                 <div class="level-left">
-                                    <h1 class="color-secondary is-size-4 has-text-white">{{ title }}</h1>
+                                    <h1 class="color-secondary is-size-4 has-text-white">Profile</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id"
-                                   :post="post" :user="post.user" :userIdConnected="userIdConnected"></PostComponent>
-                    <FollowComponent v-if="selected.followings && user.followings.length > 0"
-                                     v-for="following in user.followings" :key="following.id"
-                                     :post="following"></FollowComponent>
-                    <FollowComponent v-if="selected.followers && user.followers.length > 0"
-                                     v-for="follower in user.followers" :key="follower.id"
-                                     :post="follower"></FollowComponent>
+
                 </div>
             </div>
         </div>
@@ -97,13 +82,7 @@
 					followings: ''
 				},
 				posts: '',
-				title: 'Latest tweets',
 				followtext: '',
-				selected: {
-					tweets: true,
-					followings: false,
-					followers: false,
-				}
 			}
 		},
 		computed: {
@@ -144,32 +123,10 @@
 					.then((response) => this.getUser(this.username))
 					.catch((error) => console.log(error))
 			},
-			resetView(type) {
-				for (let view in this.selected) {
-					this.selected[view] = false
-					this.selected[type] = true
-				}
-			},
-			changeView(event) {
-				switch (event.target.getAttribute('data-type')) {
-					case "tweets":
-						this.title = "Latest tweets";
-						this.resetView("tweets");
-						break;
-					case "followings":
-						this.title = "Followings";
-						this.resetView("followings");
-						break;
-					case "followers":
-						this.title = "Followers";
-						this.resetView("followers");
-						break;
-				}
-			}
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
-			this.username = url.slice(url.length - 1);
+			this.username = url.slice(url.length - 2, url.length - 1);
 			this.getUser(this.username);
 			this.getPosts(this.username);
 		}
