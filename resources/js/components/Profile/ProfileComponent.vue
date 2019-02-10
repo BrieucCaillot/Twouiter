@@ -6,7 +6,7 @@
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
-                                 style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                 :style=" `background: url(${imageData}) no-repeat center center / cover`"></div>
                         </div>
                     </div>
                     <div class="columns is-vcentered is-flex">
@@ -55,7 +55,50 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="columns">
+                        <div class="column">
+                            <div class="level">
+                                <div class="field full-w">
+                                    <label class="label has-text-white">Name</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Name" v-model="user.name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="field full-w">
+                                    <label class="label has-text-white">Username</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Username" v-model="user.username">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="field">
+                                    <label class="label has-text-white">Profile picture</label>
+                                    <div class="file" :class="{ 'has-name': imageData.length > 0 }">
+                                        <label class="file-label">
+                                            <input type="file" class="file-input" @change="previewImage($event)" accept="image/*">
+                                            <span class="file-cta">
+                                            <span class="file-icon">
+                                            📌
+                                            </span>
+                                            <span class="file-label">
+                                                Choose a file…
+                                            </span>
+                                        </span>
+                                            <span v-if="imageData.length > 0" class="file-name has-text-white">{{ imageName }}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level" v-if="imageData.length > 0">
+                                <div class="image-preview">
+                                    <img class="preview" :src="imageData">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,25 +124,10 @@
 					followers: '',
 					followings: ''
 				},
-				posts: '',
+                imageName: '',
+				imageData: '',
 				followtext: '',
 			}
-		},
-		computed: {
-			isFollowable() {
-				if (this.user.followers.length > 0) {
-					for (let user in this.user.followers) {
-						if (this.user.followers[user].id == this.userIdConnected) {
-							this.followtext = "Unfollow"
-                            return false;
-                        }
-						this.followtext = "Follow";
-						return true;
-					}
-                }
-				this.followtext = "Follow";
-				return true;
-			},
 		},
 		methods: {
 			getUser(username) {
@@ -109,26 +137,22 @@
 						if (500 == error.response.status) window.location.href = '/'
 					})
 			},
-			getPosts(username) {
-				axios.get(`/api/user/posts/${username}`)
-					.then((response) => this.posts = response.data)
-					.catch((error) => {
-						if (500 == error.response.status) window.location.href = '/'
-					})
-			},
-			changeFollow(followtype) {
-				axios.post(`/api/user/${followtype}`, {
-					userId: this.user.id
-				})
-					.then((response) => this.getUser(this.username))
-					.catch((error) => console.log(error))
-			},
+			previewImage(event) {
+				let input = event.target;
+				this.imageName = input.value.split("\\").pop();
+				if (input.files && input.files[0]) {
+					let reader = new FileReader();
+					reader.onload = (e) => {
+						this.imageData = e.target.result;
+					}
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
 		},
 		beforeMount() {
 			let url = window.location.href.split('/');
 			this.username = url.slice(url.length - 2, url.length - 1);
 			this.getUser(this.username);
-			this.getPosts(this.username);
 		}
 	}
 </script>

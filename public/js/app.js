@@ -2277,6 +2277,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2293,27 +2336,10 @@ __webpack_require__.r(__webpack_exports__);
         followers: '',
         followings: ''
       },
-      posts: '',
+      imageName: '',
+      imageData: '',
       followtext: ''
     };
-  },
-  computed: {
-    isFollowable: function isFollowable() {
-      if (this.user.followers.length > 0) {
-        for (var user in this.user.followers) {
-          if (this.user.followers[user].id == this.userIdConnected) {
-            this.followtext = "Unfollow";
-            return false;
-          }
-
-          this.followtext = "Follow";
-          return true;
-        }
-      }
-
-      this.followtext = "Follow";
-      return true;
-    }
   },
   methods: {
     getUser: function getUser(username) {
@@ -2325,32 +2351,27 @@ __webpack_require__.r(__webpack_exports__);
         if (500 == error.response.status) window.location.href = '/';
       });
     },
-    getPosts: function getPosts(username) {
+    previewImage: function previewImage(event) {
       var _this2 = this;
 
-      axios.get("/api/user/posts/".concat(username)).then(function (response) {
-        return _this2.posts = response.data;
-      }).catch(function (error) {
-        if (500 == error.response.status) window.location.href = '/';
-      });
-    },
-    changeFollow: function changeFollow(followtype) {
-      var _this3 = this;
+      var input = event.target;
+      this.imageName = input.value.split("\\").pop();
 
-      axios.post("/api/user/".concat(followtype), {
-        userId: this.user.id
-      }).then(function (response) {
-        return _this3.getUser(_this3.username);
-      }).catch(function (error) {
-        return console.log(error);
-      });
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          _this2.imageData = e.target.result;
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
     }
   },
   beforeMount: function beforeMount() {
     var url = window.location.href.split('/');
     this.username = url.slice(url.length - 2, url.length - 1);
     this.getUser(this.username);
-    this.getPosts(this.username);
   }
 });
 
@@ -34043,7 +34064,17 @@ var render = function() {
                 "column user__profile full-h is-3 is-12-touch has-background-white"
             },
             [
-              _vm._m(0),
+              _c("div", { staticClass: "columns mg-t1" }, [
+                _c("div", { staticClass: "column user__profile__top" }, [
+                  _c("div", {
+                    staticClass: "user__profile__top__img",
+                    style:
+                      "background: url(" +
+                      _vm.imageData +
+                      ") no-repeat center center / cover"
+                  })
+                ])
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "columns is-vcentered is-flex" }, [
                 _c("div", { staticClass: "user__right column" }, [
@@ -34069,7 +34100,7 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(1)
+                  _vm._m(0)
                 ])
               ]),
               _vm._v(" "),
@@ -34135,29 +34166,133 @@ var render = function() {
             ]
           ),
           _vm._v(" "),
-          _vm._m(2)
+          _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "columns" }, [
+              _c("div", { staticClass: "column" }, [
+                _c("div", { staticClass: "level" }, [
+                  _c("div", { staticClass: "field full-w" }, [
+                    _c("label", { staticClass: "label has-text-white" }, [
+                      _vm._v("Name")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "control" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.name,
+                            expression: "user.name"
+                          }
+                        ],
+                        staticClass: "input",
+                        attrs: { type: "text", placeholder: "Name" },
+                        domProps: { value: _vm.user.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "level" }, [
+                  _c("div", { staticClass: "field full-w" }, [
+                    _c("label", { staticClass: "label has-text-white" }, [
+                      _vm._v("Username")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "control" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.username,
+                            expression: "user.username"
+                          }
+                        ],
+                        staticClass: "input",
+                        attrs: { type: "text", placeholder: "Username" },
+                        domProps: { value: _vm.user.username },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "username", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "level" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("label", { staticClass: "label has-text-white" }, [
+                      _vm._v("Profile picture")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "file",
+                        class: { "has-name": _vm.imageData.length > 0 }
+                      },
+                      [
+                        _c("label", { staticClass: "file-label" }, [
+                          _c("input", {
+                            staticClass: "file-input",
+                            attrs: { type: "file", accept: "image/*" },
+                            on: {
+                              change: function($event) {
+                                _vm.previewImage($event)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _vm.imageData.length > 0
+                            ? _c(
+                                "span",
+                                { staticClass: "file-name has-text-white" },
+                                [_vm._v(_vm._s(_vm.imageName))]
+                              )
+                            : _vm._e()
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm.imageData.length > 0
+                  ? _c("div", { staticClass: "level" }, [
+                      _c("div", { staticClass: "image-preview" }, [
+                        _c("img", {
+                          staticClass: "preview",
+                          attrs: { src: _vm.imageData }
+                        })
+                      ])
+                    ])
+                  : _vm._e()
+              ])
+            ])
+          ])
         ])
       ])
     ]
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "columns mg-t1" }, [
-      _c("div", { staticClass: "column user__profile__top" }, [
-        _c("div", {
-          staticClass: "user__profile__top__img",
-          staticStyle: {
-            background:
-              "url('https://via.placeholder.com/150') no-repeat center center"
-          }
-        })
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -34172,19 +34307,35 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "column is-6 is-12-touch posts__center" }, [
-      _c("div", { staticClass: "columns" }, [
-        _c("div", { staticClass: "column" }, [
-          _c("div", { staticClass: "level" }, [
-            _c("div", { staticClass: "level-left" }, [
-              _c(
-                "h1",
-                { staticClass: "color-secondary is-size-4 has-text-white" },
-                [_vm._v("Profile")]
-              )
-            ])
+    return _c("div", { staticClass: "columns" }, [
+      _c("div", { staticClass: "column" }, [
+        _c("div", { staticClass: "level" }, [
+          _c("div", { staticClass: "level-left" }, [
+            _c(
+              "h1",
+              { staticClass: "color-secondary is-size-4 has-text-white" },
+              [_vm._v("Profile")]
+            )
           ])
         ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "file-cta" }, [
+      _c("span", { staticClass: "file-icon" }, [
+        _vm._v(
+          "\n                                        📌\n                                        "
+        )
+      ]),
+      _vm._v(" "),
+      _c("span", { staticClass: "file-label" }, [
+        _vm._v(
+          "\n                                            Choose a file…\n                                        "
+        )
       ])
     ])
   }
