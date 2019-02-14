@@ -1,17 +1,17 @@
 <template>
-    <main id="content" class="login background-color-primary">
+    <main id="content" class="login background-color-white">
         <div class="login__content columns full-h">
             <div class="login__content__left column is-6"></div>
-            <div class="column is-6 background-color-secondary">
+            <div class="column is-6 background-color-primary">
                 <div class="login__content__right">
                     <form @submit.prevent="loginForm()">
                         <div class="level">
                             <h1 class="is-size-3 has-text-white">Sign Up</h1>
                         </div>
                         <div v-if="errors.username || errors.email || errors.password" class="notification is-danger">
-                            <p v-for="error in errors.username">- {{ error }}</p>
-                            <p v-for="error in errors.email">- {{ error }}</p>
-                            <p v-for="error in errors.password">- {{ error }}</p>
+                            <p v-if="errors.username.length > 0" v-for="error in errors.username">- {{ error }}</p>
+                            <p v-if="errors.email.length > 0" v-for="error in errors.email">- {{ error }}</p>
+                            <p v-if="errors.password.length > 0" v-for="error in errors.password">- {{ error }}</p>
                         </div>
                         <div class="level">
                             <div class="field full-w">
@@ -61,8 +61,7 @@
                             </div>
                         </div>
                         <div class="level">
-                            <button class="button background-color-primary has-text-white" type="submit">Connect
-                            </button>
+                            <button class="button background-color-white has-text-black" type="submit">Register</button>
                         </div>
                     </form>
                 </div>
@@ -99,10 +98,10 @@
 				})
 					.then((response) => (response.status == 200) ? location.reload() : null)
 					.catch((error) => {
+						console.log(error);
 						this.errors.username = error.response.data.errors.username
 						this.errors.email = error.response.data.errors.email
 						this.errors.password = error.response.data.errors.password
-						console.log(Object.keys(this.errors).length > 0);
 					})
 			}
 		}

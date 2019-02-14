@@ -13,4 +13,10 @@
       background-color: #23B960;
     }
   }
+  &.background-color-white, .background-color-primary {
+    &:hover {
+      background-color: #0F71CC;
+      color: #ffffff !important;
+    }
+  }
 }

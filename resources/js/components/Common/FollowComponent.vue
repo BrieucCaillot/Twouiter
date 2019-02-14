@@ -6,8 +6,8 @@
                     <div class="posts__post mg-t1 has-background-white columns is-vcentered is-flex">
                         <div class="column posts__post__left">
                             <a :href="/user/ + post.username">
-                                <div class="posts__post__left__img"
-                                     style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                <div :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"
+                                     class="posts__post__left__img"></div>
                             </a>
                         </div>
                         <div class="column posts__post__right">
@@ -29,7 +29,7 @@
 
 <script>
 	export default {
-		name: "PostComponent",
+		name: "FollowComponent",
         props: ['post'],
 	}
 </script>

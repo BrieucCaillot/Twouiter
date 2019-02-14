@@ -5,8 +5,8 @@
                 <div class="column is-3 is-12-touch">
                     <div class="columns is-vcentered posts__user is-flex has-background-white">
                         <div class="posts__user__left column ">
-                            <div class="posts__user__left__img"
-                                 style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                            <div :style="`background: url(storage/avatars/${user.image}) no-repeat center center / cover`"
+                                 class="posts__user__left__img"></div>
                         </div>
                         <div class="posts__user__right column has-text-black">
                             <div class="level posts__user__right__top">
@@ -81,6 +81,7 @@
 					})
 						.then((response) => {
 							if (response.status == 200) {
+								this.message = '';
 								this.getUser();
 								this.getPosts();
 							};

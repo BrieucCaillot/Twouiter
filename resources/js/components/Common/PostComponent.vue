@@ -6,8 +6,8 @@
                 <a href="void:javascript()" @click="deleteTweet($event)" class="delete-post"></a>
                 <div class="column posts__post__left">
                     <a :href="/user/ + user.username">
-                        <div class="posts__post__left__img"
-                             style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                        <div :style="`background: url(storage/avatars/${user.image}) no-repeat center center / cover`"
+                             class="posts__post__left__img"></div>
                     </a>
                 </div>
                 <div class="column posts__post__right">

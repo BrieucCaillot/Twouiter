@@ -1,8 +1,8 @@
 <template>
-    <main id="content" class="login background-color-primary">
+    <main id="content" class="login background-color-white">
         <div class="login__content columns full-h">
             <div class="login__content__left column is-6"></div>
-            <div class="column is-6 background-color-secondary">
+            <div class="column is-6 background-color-primary">
                 <div class="login__content__right">
                     <form @submit.prevent="loginForm()">
                         <div class="level">
@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <div class="level">
-                            <button class="button background-color-primary has-text-white" type="submit">Connect</button>
+                            <button class="button background-color-white has-text-black" type="submit">Connect</button>
                         </div>
                     </form>
                 </div>

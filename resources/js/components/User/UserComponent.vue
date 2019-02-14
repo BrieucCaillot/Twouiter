@@ -6,7 +6,7 @@
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
-                                 style="background: url('https://via.placeholder.com/150') no-repeat center center"></div>
+                                 :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"></div>
                         </div>
                     </div>
                     <div class="columns is-vcentered is-flex">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
                     <div class="columns">
-                        <div class="column">
+                        <div class="column pd0">
                             <div class="level">
                                 <div class="level-left">
                                     <h1 class="color-secondary is-size-4 has-text-white">{{ title }}</h1>
@@ -112,10 +112,9 @@
 					for (let user in this.user.followers) {
 						if (this.user.followers[user].id == this.userIdConnected) {
 							this.followtext = "Unfollow"
+                            console.log('if', this.followtext)
                             return false;
                         }
-						this.followtext = "Follow";
-						return true;
 					}
                 }
 				this.followtext = "Follow";

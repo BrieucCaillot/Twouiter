@@ -1,7 +1,7 @@
 <template>
     <main id="content" class="user posts background-color-primary has-text-black">
         <div class="container is-fluid">
-            <div class="columns is-multiline">
+            <form @submit.prevent="updateUser(user.username)" enctype="multipart/form-data" class="columns is-multiline">
                 <div class="column user__profile full-h is-3 is-12-touch has-background-white">
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
@@ -21,7 +21,7 @@
                                 <span class="mauto has-text-center">@{{ user.username }}</span>
                             </div>
                             <div class="level is-mobile">
-                                <button class="button is-success has-text-white mauto">Save</button>
+                                <button type="submit" class="button is-success has-text-white mauto">Save</button>
                             </div>
                         </div>
                     </div>
@@ -55,6 +55,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="errors.message || errors.username || errors.name" class="notification is-danger">
+                        <p v-if="errors.message > 0">- {{ errors.message }}</p>
+                        <p v-if="errors.name.length > 0" v-for="error in errors.name">- {{ error }}</p>
+                        <p v-if="errors.username.length > 0" v-for="error in errors.username">- {{ error }}</p>
+                    </div>
                     <div class="columns">
                         <div class="column">
                             <div class="level">
@@ -78,7 +83,8 @@
                                     <label class="label has-text-white">Profile picture</label>
                                     <div class="file" :class="{ 'has-name': imageData.length > 0 }">
                                         <label class="file-label">
-                                            <input type="file" class="file-input" @change="previewImage($event)" accept="image/*">
+                                            <input type="file" class="file-input" @change="previewImage($event)"
+                                                   accept="image/*">
                                             <span class="file-cta">
                                             <span class="file-icon">
                                             📌
@@ -100,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </main>
 </template>
@@ -124,9 +130,15 @@
 					followers: '',
 					followings: ''
 				},
-                imageName: '',
+                image: '',
+				imageName: '',
 				imageData: '',
 				followtext: '',
+				errors: {
+					message: '',
+					name: '',
+					username: '',
+				}
 			}
 		},
 		methods: {
@@ -139,14 +151,34 @@
 			},
 			previewImage(event) {
 				let input = event.target;
+				this.image = input.files[0];
 				this.imageName = input.value.split("\\").pop();
 				if (input.files && input.files[0]) {
 					let reader = new FileReader();
+
 					reader.onload = (e) => {
 						this.imageData = e.target.result;
 					}
 					reader.readAsDataURL(input.files[0]);
 				}
+			},
+			updateUser(username) {
+				const formData = new FormData()
+				formData.append('image', this.image, this.image.name)
+				console.log(formData.get('image'));
+				formData.append('name', this.user.name)
+				formData.append('username', username)
+				axios.post('/api/user/profile', formData, {headers: {'content-type': 'multipart/form-data'}})
+					.then((reponse) => {
+						console.log(reponse)
+                        this.errors = '';
+					})
+					.catch((error) => {
+						console.log(error.response.data);
+						this.errors.message = error.response.data.message;
+						this.errors.name = error.response.data.errors.name;
+						this.errors.username = error.response.data.errors.username;
+					})
 			}
 		},
 		beforeMount() {

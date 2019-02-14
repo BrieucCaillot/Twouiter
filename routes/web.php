@@ -15,22 +15,19 @@ use Illuminate\Support\Facades\Auth;
 
 Route::middleware('web')->group(function () {
     Auth::routes();
-    Route::get('user/{username}', 'UserController@index');
-    Route::prefix('api')->group(function () {
-
-        // @TODO NOT WORKING WHEN NOT CONNECTED - 401 UNAUTHORIZED
-        Route::get('userc/{username?}', 'UserController@user');
-    });
     Route::get('/user', function () { return redirect()->route('home'); });
 });
 
 Route::middleware('auth')->group(function () {
 
     Route::get('/', 'PostController@index')->name('home');
+    Route::get('user/{username}', 'UserController@index');
     Route::get('user/{username}/profile', 'ProfileController@index');
     Route::post('/post', 'PostController@store');
 
     Route::prefix('api')->group(function () {
+        //Profile
+        Route::post('user/profile', 'ProfileController@update');
         // User
         Route::get('userc/{username?}', 'UserController@user');
         Route::post('user/follow', 'UserController@follow');
