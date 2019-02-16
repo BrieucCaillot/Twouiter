@@ -1,55 +1,49 @@
 <template>
-    <main id="content" class="user posts background-color-primary has-text-black">
+    <main id="content" class="user posts has-text-black">
         <div class="container is-fluid">
             <div class="columns is-multiline">
-                <div class="column user__profile full-h is-3 is-12-touch has-background-white">
+                <div class="column user__profile shadow full-h is-3 is-12-touch">
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
                                  :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"></div>
                         </div>
                     </div>
-                    <div class="columns is-vcentered is-flex">
+                    <div class="columns is-vcentered">
                         <div class="user__right column">
-                            <div class="level is-mobile user__profile__username">
-                                <a class="has-text-black mauto has-text-centered is-size-4"
-                                   :href="/user/ + user.username">
-                                    <strong>{{ user.name }}</strong>
-                                </a>
+                            <div class="level is-mobile user__profile__name">
+                                <a class="user__profile__name mauto has-text-centered"
+                                   :href="/user/ + user.username">{{ user.name }}</a>
                             </div>
                             <div class="level has-text-centered">
-                                <span class="mauto has-text-center">@{{ user.username }}</span>
+                                <span class="mauto has-text-center user__profile__username">@{{ user.username }}</span>
                             </div>
                             <div class="level is-mobile">
-                                <a :href="`/user/${username}/profile`" v-if="userIdConnected == user.id"
-                                   class="button background-color-primary has-text-white mauto">Edit Profile
+                                <a :href="`/user/${username}/profile`" class="button background-color-primary has-text-white mauto"
+                                        v-if="userIdConnected == user.id">Edit Profile
                                 </a>
-                                <button v-else-if="isFollowable" @click="changeFollow('follow')"
-                                        class="button is-success has-text-white mauto">{{ followtext }}
+                                <button @click="changeFollow('follow')" class="button is-success has-text-white mauto"
+                                        v-else-if="isFollowable">{{ followtext }}
                                 </button>
-                                <button v-else-if="!isFollowable" @click="changeFollow('unfollow')"
-                                        class="button is-danger has-text-white mauto">{{ followtext }}
+                                <button @click="changeFollow('unfollow')" class="button is-danger has-text-white mauto"
+                                        v-else-if="!isFollowable">{{ followtext }}
                                 </button>
                             </div>
                         </div>
                     </div>
                     <hr>
-                    <div class="columns">
+                    <div class="columns is-flex-mobile">
                         <div class="column">
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="tweets" class="has-text-black">Tweets</a>
-                                <span>{{ user.countPosts }}</span>
-                            </div>
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="followings"
-                                   class="has-text-black">Followings</a>
-                                <span>{{ user.countFollowings }}</span>
-                            </div>
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="followers"
-                                   class="has-text-black">Followers</a>
-                                <span>{{ user.countFollowers }}</span>
-                            </div>
+                            <p @click="changeView($event)" data-type="tweets" class="user__profile__type has-text-centered c-pointer">Tweets</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countPosts }}</p>
+                        </div>
+                        <div class="column">
+                            <p @click="changeView($event)" data-type="followings" class="user__profile__type has-text-centered c-pointer">Followings</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowings }}</p>
+                        </div>
+                        <div class="column">
+                            <p @click="changeView($event)" data-type="followers" class="user__profile__type has-text-centered c-pointer">Followers</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowers }}</p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +52,7 @@
                         <div class="column pd0">
                             <div class="level">
                                 <div class="level-left">
-                                    <h1 class="color-secondary is-size-4 has-text-white">{{ title }}</h1>
+                                    <h1 class="color-secondary is-size-4">{{ title }}</h1>
                                 </div>
                             </div>
                         </div>
@@ -111,12 +105,12 @@
 				if (this.user.followers.length > 0) {
 					for (let user in this.user.followers) {
 						if (this.user.followers[user].id == this.userIdConnected) {
-							this.followtext = "Unfollow"
-                            console.log('if', this.followtext)
-                            return false;
-                        }
+							this.followtext = "Unfollow";
+							console.log('if', this.followtext);
+							return false;
+						}
 					}
-                }
+				}
 				this.followtext = "Follow";
 				return true;
 			},
@@ -145,7 +139,7 @@
 			},
 			resetView(type) {
 				for (let view in this.selected) {
-					this.selected[view] = false
+					this.selected[view] = false;
 					this.selected[type] = true
 				}
 			},

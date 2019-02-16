@@ -1828,13 +1828,10 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return response.status == 200 ? location.reload() : null;
       }).catch(function (error) {
-        _this.errors.username = error.response.data.errors.username;
-        _this.errors.password = error.response.data.errors.password;
+        _this.errors = {};
+        _this.errors = error.response.data.errors;
       });
     }
-  },
-  mounted: function mounted() {
-    console.log(this.errors.username.length);
   }
 });
 
@@ -1950,10 +1947,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         return response.status == 200 ? location.reload() : null;
       }).catch(function (error) {
-        console.log(error);
-        _this.errors.username = error.response.data.errors.username;
-        _this.errors.email = error.response.data.errors.email;
-        _this.errors.password = error.response.data.errors.password;
+        _this.errors = {};
+        _this.errors = error.response.data.errors;
       });
     }
   }
@@ -2001,7 +1996,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "FollowComponent",
-  props: ['post']
+  props: ['post'],
+  mounted: function mounted() {
+    console.log(this.post);
+  }
 });
 
 /***/ }),
@@ -2015,8 +2013,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
 //
 //
 //
@@ -2135,6 +2131,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
@@ -2163,8 +2168,6 @@ __webpack_require__.r(__webpack_exports__);
 
             _this.getPosts();
           }
-
-          ;
         }).catch(function (error) {
           console.log(error);
         });
@@ -2327,6 +2330,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2343,12 +2379,15 @@ __webpack_require__.r(__webpack_exports__);
         followers: '',
         followings: ''
       },
+      oldpassword: '',
+      password: '',
+      password_confirmation: '',
       image: '',
       imageName: '',
       imageData: '',
       followtext: '',
+      success: '',
       errors: {
-        message: '',
         name: '',
         username: ''
       }
@@ -2361,7 +2400,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/userc/".concat(username)).then(function (response) {
         return _this.user = response.data;
       }).catch(function (error) {
-        if (500 == error.response.status) window.location.href = '/';
+        return console.log(error);
       });
     },
     previewImage: function previewImage(event) {
@@ -2384,23 +2423,25 @@ __webpack_require__.r(__webpack_exports__);
     updateUser: function updateUser(username) {
       var _this3 = this;
 
+      this.success = '';
       var formData = new FormData();
-      formData.append('image', this.image, this.image.name);
-      console.log(formData.get('image'));
       formData.append('name', this.user.name);
       formData.append('username', username);
+      formData.append('email', this.user.email);
+      formData.append('oldpassword', this.user.oldpassword);
+      formData.append('password', this.password);
+      formData.append('password_confirmation', this.password_confirmation);
+      formData.append('image', this.image, this.image.name);
       axios.post('/api/user/profile', formData, {
         headers: {
           'content-type': 'multipart/form-data'
         }
       }).then(function (reponse) {
-        console.log(reponse);
-        _this3.errors = '';
+        _this3.errors = {};
+        _this3.success = reponse.data;
       }).catch(function (error) {
-        console.log(error.response.data);
-        _this3.errors.message = error.response.data.message;
-        _this3.errors.name = error.response.data.errors.name;
-        _this3.errors.username = error.response.data.errors.username;
+        _this3.errors = {};
+        _this3.errors = error.response.data.errors;
       });
     }
   },
@@ -2424,12 +2465,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Common_PostComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Common/PostComponent */ "./resources/js/components/Common/PostComponent.vue");
 /* harmony import */ var _Common_FollowComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Common/FollowComponent */ "./resources/js/components/Common/FollowComponent.vue");
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2628,7 +2663,7 @@ __webpack_require__.r(__webpack_exports__);
 // Object.prototype.constructor. Remove this eventually
 module.exports = function (obj) {
   return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
-}
+};
 
 function isBuffer (obj) {
   return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
@@ -5455,8 +5490,8 @@ function nodeName( elem, name ) {
 
   return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 
-};
-var rsingleTag = ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i );
+}
+	var rsingleTag = ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i );
 
 
 
@@ -13025,17 +13060,9 @@ return jQuery;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
- * @license
- * Lodash <https://lodash.com/>
- * Copyright JS Foundation and other contributors <https://js.foundation/>
- * Released under MIT license <https://lodash.com/license>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- */
-;(function() {
-
-  /** Used as a safe reference for `undefined` in pre-ES5 environments. */
+/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;
+			(function () {
+				/** Used as a safe reference for `undefined` in pre-ES5 environments. */
   var undefined;
 
   /** Used as the semantic version number. */
@@ -32767,7 +32794,7 @@ function defaultClearTimeout () {
     } catch (e) {
         cachedClearTimeout = defaultClearTimeout;
     }
-} ())
+} ());
 function runTimeout(fun) {
     if (cachedSetTimeout === setTimeout) {
         //normal enviroments in sane situations
@@ -32904,7 +32931,7 @@ process.emit = noop;
 process.prependListener = noop;
 process.prependOnceListener = noop;
 
-process.listeners = function (name) { return [] }
+process.listeners = function (name) { return [] };
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');
@@ -33204,9 +33231,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c(
     "main",
     { staticClass: "login background-color-white", attrs: { id: "content" } },
@@ -33221,7 +33248,7 @@ var render = function() {
               {
                 on: {
                   submit: function($event) {
-                    $event.preventDefault()
+                    $event.preventDefault();
                     _vm.loginForm()
                   }
                 }
@@ -33337,20 +33364,20 @@ var render = function() {
       ])
     ]
   )
-}
+};
 var staticRenderFns = [
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
       _c("h1", { staticClass: "is-size-3 has-text-white" }, [_vm._v("Sign In")])
     ])
   },
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
       _c(
         "button",
@@ -33362,7 +33389,7 @@ var staticRenderFns = [
       )
     ])
   }
-]
+];
 render._withStripped = true
 
 
@@ -33381,9 +33408,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c(
     "main",
     { staticClass: "login background-color-white", attrs: { id: "content" } },
@@ -33398,7 +33425,7 @@ var render = function() {
               {
                 on: {
                   submit: function($event) {
-                    $event.preventDefault()
+                    $event.preventDefault();
                     _vm.loginForm()
                   }
                 }
@@ -33648,20 +33675,20 @@ var render = function() {
       ])
     ]
   )
-}
+};
 var staticRenderFns = [
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
       _c("h1", { staticClass: "is-size-3 has-text-white" }, [_vm._v("Sign Up")])
     ])
   },
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
       _c(
         "button",
@@ -33673,7 +33700,7 @@ var staticRenderFns = [
       )
     ])
   }
-]
+];
 render._withStripped = true
 
 
@@ -33692,9 +33719,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c("div", { staticClass: "columns" }, [
     _c("div", { staticClass: "column" }, [
       _c("div", { staticClass: "columns" }, [
@@ -33703,7 +33730,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "posts__post mg-t1 has-background-white columns is-vcentered is-flex"
+                "posts__post shadow mg-t1 has-background-white columns is-vcentered is-flex"
             },
             [
               _c("div", { staticClass: "column posts__post__left" }, [
@@ -33712,7 +33739,7 @@ var render = function() {
                     staticClass: "posts__post__left__img",
                     style:
                       "background: url(/storage/avatars/" +
-                      _vm.user.image +
+                      _vm.post.image +
                       ") no-repeat center center / cover"
                   })
                 ])
@@ -33743,8 +33770,8 @@ var render = function() {
       ])
     ])
   ])
-}
-var staticRenderFns = []
+};
+var staticRenderFns = [];
 render._withStripped = true
 
 
@@ -33763,15 +33790,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c("div", { staticClass: "columns" }, [
     _c("div", { staticClass: "column" }, [
       _c(
         "div",
         {
-          staticClass: "posts__post mg-t1 has-background-white columns is-flex",
+          staticClass:
+            "posts__post shadow mg-t1 has-background-white columns is-flex",
           class:
             _vm.userIdConnected == _vm.user.id
               ? "posts__post__delete"
@@ -33793,7 +33821,7 @@ var render = function() {
               _c("div", {
                 staticClass: "posts__post__left__img",
                 style:
-                  "background: url(storage/avatars/" +
+                  "background: url(/storage/avatars/" +
                   _vm.user.image +
                   ") no-repeat center center / cover"
               })
@@ -33809,11 +33837,14 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "level-left" }, [
-                  _c("a", { attrs: { href: /user/ + _vm.user.username } }, [
-                    _c("strong", { staticClass: "posts__post__right__name" }, [
-                      _vm._v(_vm._s(_vm.user.name))
-                    ])
-                  ]),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "posts__post__right__name",
+                      attrs: { href: /user/ + _vm.user.username }
+                    },
+                    [_vm._v(_vm._s(_vm.user.name))]
+                  ),
                   _vm._v(" "),
                   _c("span", { staticClass: "posts__post__right__username" }, [
                     _vm._v("@" + _vm._s(_vm.user.username))
@@ -33842,8 +33873,8 @@ var render = function() {
       )
     ])
   ])
-}
-var staticRenderFns = []
+};
+var staticRenderFns = [];
 render._withStripped = true
 
 
@@ -33862,205 +33893,223 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "main",
-    { staticClass: "posts background-color-primary", attrs: { id: "content" } },
-    [
-      _c("div", { staticClass: "container is-fluid" }, [
-        _c("div", { staticClass: "columns is-multiline" }, [
-          _c("div", { staticClass: "column is-3 is-12-touch" }, [
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("main", { staticClass: "posts", attrs: { id: "content" } }, [
+    _c("div", { staticClass: "container is-fluid" }, [
+      _vm.user
+        ? _c("div", { staticClass: "columns is-multiline" }, [
             _c(
               "div",
               {
                 staticClass:
-                  "columns is-vcentered posts__user is-flex has-background-white"
+                  "column user__profile shadow full-h is-3 is-12-touch"
               },
               [
-                _c("div", { staticClass: "posts__user__left column " }, [
-                  _c("div", {
-                    staticClass: "posts__user__left__img",
-                    style:
-                      "background: url(storage/avatars/" +
-                      _vm.user.image +
-                      ") no-repeat center center / cover"
-                  })
+                _c("div", { staticClass: "columns mg-t1" }, [
+                  _c("div", { staticClass: "column user__profile__top" }, [
+                    _c("div", {
+                      staticClass: "user__profile__top__img",
+                      style:
+                        "background: url(/storage/avatars/" +
+                        _vm.user.image +
+                        ") no-repeat center center / cover"
+                    })
+                  ])
                 ]),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "posts__user__right column has-text-black" },
-                  [
+                _c("div", { staticClass: "columns is-vcentered" }, [
+                  _c("div", { staticClass: "user__right column" }, [
                     _c(
                       "div",
-                      { staticClass: "level posts__user__right__top" },
+                      { staticClass: "level is-mobile user__profile__name" },
                       [
                         _c(
                           "a",
-                          { attrs: { href: /user/ + _vm.user.username } },
-                          [
-                            _c(
-                              "strong",
-                              { staticClass: "is-size-5 has-text-black" },
-                              [_vm._v(_vm._s(_vm.user.name))]
-                            )
-                          ]
+                          {
+                            staticClass:
+                              "user__profile__name mauto has-text-centered",
+                            attrs: { href: /user/ + _vm.user.username }
+                          },
+                          [_vm._v(_vm._s(_vm.user.name))]
                         )
                       ]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "level" }, [
-                      _c("p", [_vm._v("@" + _vm._s(_vm.user.username))])
+                    _c("div", { staticClass: "level has-text-centered" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass:
+                            "mauto has-text-center user__profile__username"
+                        },
+                        [_vm._v("@" + _vm._s(_vm.user.username))]
+                      )
                     ])
-                  ]
-                )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "columns is-flex-mobile" }, [
+                  _c("div", { staticClass: "column" }, [
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__type has-text-centered" },
+                      [_vm._v("Tweets")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__count has-text-centered" },
+                      [_vm._v(_vm._s(_vm.user.countPosts))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column" }, [
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__type has-text-centered" },
+                      [_vm._v("Followings")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__count has-text-centered" },
+                      [_vm._v(_vm._s(_vm.user.countFollowings))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column" }, [
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__type has-text-centered" },
+                      [_vm._v("Followers")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      { staticClass: "user__profile__count has-text-centered" },
+                      [_vm._v(_vm._s(_vm.user.countFollowers))]
+                    )
+                  ])
+                ])
               ]
             ),
             _vm._v(" "),
             _c(
               "div",
-              {
-                staticClass:
-                  "columns posts__user has-background-white has-text-black mg-t2"
-              },
+              { staticClass: "column is-6 is-12-touch posts__center" },
               [
-                _c("div", { staticClass: "column" }, [
-                  _c("div", { staticClass: "level" }, [
-                    _c("span", { staticClass: "has-text-black" }, [
-                      _vm._v("Tweets")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countPosts))])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "level" }, [
-                    _c("span", { staticClass: "has-text-black" }, [
-                      _vm._v("Followings")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "level" }, [
-                    _c("span", { staticClass: "has-text-black" }, [
-                      _vm._v("Followers")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
-                  ])
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "column is-6 is-12-touch posts__center" },
-            [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "posts__newpost columns has-background-white has-text-white"
-                },
-                [
-                  _c("div", { staticClass: "column" }, [
-                    _c(
-                      "form",
-                      {
-                        attrs: { method: "POST" },
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            _vm.newTweet()
-                          }
-                        }
-                      },
-                      [
-                        _vm._m(0),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "level" }, [
-                          _c("textarea", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.message,
-                                expression: "message"
-                              }
-                            ],
-                            staticClass: "textarea",
-                            attrs: {
-                              rows: "2",
-                              type: "text",
-                              placeholder: "Whats up ?"
-                            },
-                            domProps: { value: _vm.message },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.message = $event.target.value
-                              }
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "posts__newpost shadow columns background-color-secondary has-text-white"
+                  },
+                  [
+                    _c("div", { staticClass: "column" }, [
+                      _c(
+                        "form",
+                        {
+                          attrs: { method: "POST" },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault();
+                              _vm.newTweet()
                             }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _vm._m(1)
-                      ]
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _vm._l(_vm.allPosts, function(post) {
-                return _c("PostComponent", {
-                  key: post.id,
-                  attrs: {
-                    post: post,
-                    user: post.user,
-                    userIdConnected: _vm.user.id
-                  }
+                          }
+                        },
+                        [
+                          _vm._m(0),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "level" }, [
+                            _c("textarea", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.message,
+                                  expression: "message"
+                                }
+                              ],
+                              staticClass: "textarea",
+                              attrs: {
+                                rows: "2",
+                                type: "text",
+                                placeholder: "Your message"
+                              },
+                              domProps: { value: _vm.message },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.message = $event.target.value
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _vm._m(1)
+                        ]
+                      )
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.allPosts, function(post) {
+                  return _c("PostComponent", {
+                    key: post.id,
+                    attrs: {
+                      post: post,
+                      user: post.user,
+                      userIdConnected: _vm.user.id
+                    }
+                  })
                 })
-              })
-            ],
-            2
-          )
-        ])
-      ])
-    ]
-  )
-}
+              ],
+              2
+            )
+          ])
+        : _vm._e()
+    ])
+  ])
+};
 var staticRenderFns = [
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
-      _c("h1", { staticClass: "is-size-4 has-text-black" }, [
-        _vm._v("Quoi de neuf ?")
-      ])
+      _c("h1", { staticClass: "is-size-4" }, [_vm._v("Whats up ?")])
     ])
   },
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level" }, [
-      _c(
-        "button",
-        {
-          staticClass: "button background-color-primary has-text-white",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("Send")]
-      )
+      _c("div", { staticClass: "level-left" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "level-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "button background-color-primary has-text-white",
+            attrs: { type: "submit" }
+          },
+          [
+            _vm._v(
+              "\n                                        Send\n                                    "
+            )
+          ]
+        )
+      ])
     ])
   }
-]
+];
 render._withStripped = true
 
 
@@ -34079,306 +34128,491 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c(
     "main",
-    {
-      staticClass: "user posts background-color-primary has-text-black",
-      attrs: { id: "content" }
-    },
+    { staticClass: "user posts has-text-black", attrs: { id: "content" } },
     [
-      _c("div", { staticClass: "container is-fluid" }, [
-        _c(
-          "form",
-          {
-            staticClass: "columns is-multiline",
-            attrs: { enctype: "multipart/form-data" },
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                _vm.updateUser(_vm.user.username)
-              }
-            }
-          },
-          [
+      _vm.user
+        ? _c("div", { staticClass: "container is-fluid" }, [
             _c(
-              "div",
+              "form",
               {
-                staticClass:
-                  "column user__profile full-h is-3 is-12-touch has-background-white"
+                staticClass: "columns is-multiline",
+                attrs: { enctype: "multipart/form-data" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault();
+                    _vm.updateUser(_vm.user.username)
+                  }
+                }
               },
               [
-                _c("div", { staticClass: "columns mg-t1" }, [
-                  _c("div", { staticClass: "column user__profile__top" }, [
-                    _c("div", {
-                      staticClass: "user__profile__top__img",
-                      style:
-                        "background: url(" +
-                        _vm.imageData +
-                        ") no-repeat center center / cover"
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "columns is-vcentered is-flex" }, [
-                  _c("div", { staticClass: "user__right column" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "level is-mobile user__profile__username"
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass:
-                              "has-text-black mauto has-text-centered is-size-4",
-                            attrs: { href: /user/ + _vm.user.username }
-                          },
-                          [_c("strong", [_vm._v(_vm._s(_vm.user.name))])]
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level has-text-centered" }, [
-                      _c("span", { staticClass: "mauto has-text-center" }, [
-                        _vm._v("@" + _vm._s(_vm.user.username))
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "column user__profile shadow full-h is-3 is-12-touch"
+                  },
+                  [
+                    _c("div", { staticClass: "columns mg-t1" }, [
+                      _c("div", { staticClass: "column user__profile__top" }, [
+                        _vm.imageData
+                          ? _c("div", {
+                              staticClass: "user__profile__top__img",
+                              style:
+                                "background: url(" +
+                                _vm.imageData +
+                                ") no-repeat center center / cover"
+                            })
+                          : _c("div", {
+                              staticClass: "user__profile__top__img",
+                              style:
+                                "background: url('/storage/avatars/" +
+                                _vm.user.image +
+                                "') no-repeat center center / cover"
+                            })
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(0)
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("hr"),
-                _vm._v(" "),
-                _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column" }, [
-                    _c("div", { staticClass: "level" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "has-text-black",
-                          attrs: { "data-type": "tweets" },
-                          on: {
-                            click: function($event) {
-                              _vm.changeView($event)
-                            }
-                          }
-                        },
-                        [_vm._v("Tweets")]
-                      ),
-                      _vm._v(" "),
-                      _c("span", [_vm._v(_vm._s(_vm.user.countPosts))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "has-text-black",
-                          attrs: { "data-type": "followings" },
-                          on: {
-                            click: function($event) {
-                              _vm.changeView($event)
-                            }
-                          }
-                        },
-                        [_vm._v("Followings")]
-                      ),
-                      _vm._v(" "),
-                      _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "has-text-black",
-                          attrs: { "data-type": "followers" },
-                          on: {
-                            click: function($event) {
-                              _vm.changeView($event)
-                            }
-                          }
-                        },
-                        [_vm._v("Followers")]
-                      ),
-                      _vm._v(" "),
-                      _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
-                    ])
-                  ])
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "column is-6 is-12-touch posts__center" },
-              [
-                _vm._m(1),
-                _vm._v(" "),
-                _vm.errors.message || _vm.errors.username || _vm.errors.name
-                  ? _c(
-                      "div",
-                      { staticClass: "notification is-danger" },
-                      [
-                        _vm.errors.message > 0
-                          ? _c("p", [_vm._v("- " + _vm._s(_vm.errors.message))])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm._l(_vm.errors.name, function(error) {
-                          return _vm.errors.name.length > 0
-                            ? _c("p", [_vm._v("- " + _vm._s(error))])
-                            : _vm._e()
-                        }),
-                        _vm._v(" "),
-                        _vm._l(_vm.errors.username, function(error) {
-                          return _vm.errors.username.length > 0
-                            ? _c("p", [_vm._v("- " + _vm._s(error))])
-                            : _vm._e()
-                        })
-                      ],
-                      2
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("div", { staticClass: "columns" }, [
-                  _c("div", { staticClass: "column" }, [
-                    _c("div", { staticClass: "level" }, [
-                      _c("div", { staticClass: "field full-w" }, [
-                        _c("label", { staticClass: "label has-text-white" }, [
-                          _vm._v("Name")
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "control" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.user.name,
-                                expression: "user.name"
-                              }
-                            ],
-                            staticClass: "input",
-                            attrs: { type: "text", placeholder: "Name" },
-                            domProps: { value: _vm.user.name },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(_vm.user, "name", $event.target.value)
-                              }
-                            }
-                          })
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level" }, [
-                      _c("div", { staticClass: "field full-w" }, [
-                        _c("label", { staticClass: "label has-text-white" }, [
-                          _vm._v("Username")
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "control" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.user.username,
-                                expression: "user.username"
-                              }
-                            ],
-                            staticClass: "input",
-                            attrs: { type: "text", placeholder: "Username" },
-                            domProps: { value: _vm.user.username },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.user,
-                                  "username",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "level" }, [
-                      _c("div", { staticClass: "field" }, [
-                        _c("label", { staticClass: "label has-text-white" }, [
-                          _vm._v("Profile picture")
-                        ]),
-                        _vm._v(" "),
+                    _c("div", { staticClass: "columns is-vcentered" }, [
+                      _c("div", { staticClass: "user__right column" }, [
                         _c(
                           "div",
                           {
-                            staticClass: "file",
-                            class: { "has-name": _vm.imageData.length > 0 }
+                            staticClass: "level is-mobile user__profile__name"
                           },
                           [
-                            _c("label", { staticClass: "file-label" }, [
-                              _c("input", {
-                                staticClass: "file-input",
-                                attrs: { type: "file", accept: "image/*" },
-                                on: {
-                                  change: function($event) {
-                                    _vm.previewImage($event)
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _vm._m(2),
-                              _vm._v(" "),
-                              _vm.imageData.length > 0
-                                ? _c(
-                                    "span",
-                                    { staticClass: "file-name has-text-white" },
-                                    [_vm._v(_vm._s(_vm.imageName))]
-                                  )
-                                : _vm._e()
-                            ])
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "user__profile__name mauto has-text-centered",
+                                attrs: { href: /user/ + _vm.user.username }
+                              },
+                              [_vm._v(_vm._s(_vm.user.name))]
+                            )
                           ]
-                        )
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level has-text-centered" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "mauto has-text-center user__profile__username"
+                            },
+                            [_vm._v("@" + _vm._s(_vm.user.username))]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(0)
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm.imageData.length > 0
-                      ? _c("div", { staticClass: "level" }, [
-                          _c("div", { staticClass: "image-preview" }, [
-                            _c("img", {
-                              staticClass: "preview",
-                              attrs: { src: _vm.imageData }
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "columns is-flex-mobile" }, [
+                      _c("div", { staticClass: "column" }, [
+                        _c(
+                          "p",
+                          {
+                            staticClass: "user__profile__type has-text-centered"
+                          },
+                          [_vm._v("Tweets")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "user__profile__count has-text-centered"
+                          },
+                          [_vm._v(_vm._s(_vm.user.countPosts))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "column" }, [
+                        _c(
+                          "p",
+                          {
+                            staticClass: "user__profile__type has-text-centered"
+                          },
+                          [_vm._v("Followings")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "user__profile__count has-text-centered"
+                          },
+                          [_vm._v(_vm._s(_vm.user.countFollowings))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "column" }, [
+                        _c(
+                          "p",
+                          {
+                            staticClass: "user__profile__type has-text-centered"
+                          },
+                          [_vm._v("Followers")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          {
+                            staticClass:
+                              "user__profile__count has-text-centered"
+                          },
+                          [_vm._v(_vm._s(_vm.user.countFollowers))]
+                        )
+                      ])
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "column is-6 is-12-touch posts__center" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm.errors.name ||
+                    _vm.errors.username ||
+                    _vm.errors.email ||
+                    _vm.errors.password
+                      ? _c(
+                          "div",
+                          { staticClass: "notification is-danger" },
+                          [
+                            _vm._l(_vm.errors.name, function(error) {
+                              return _vm.errors.name.length > 0
+                                ? _c("p", [_vm._v("- " + _vm._s(error))])
+                                : _vm._e()
+                            }),
+                            _vm._v(" "),
+                            _vm._l(_vm.errors.username, function(error) {
+                              return _vm.errors.username.length > 0
+                                ? _c("p", [_vm._v("- " + _vm._s(error))])
+                                : _vm._e()
+                            }),
+                            _vm._v(" "),
+                            _vm._l(_vm.errors.email, function(error) {
+                              return _vm.errors.email.length > 0
+                                ? _c("p", [_vm._v("- " + _vm._s(error))])
+                                : _vm._e()
+                            }),
+                            _vm._v(" "),
+                            _vm._l(_vm.errors.password, function(error) {
+                              return _vm.errors.password.length > 0
+                                ? _c("p", [_vm._v("- " + _vm._s(error))])
+                                : _vm._e()
                             })
-                          ])
+                          ],
+                          2
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.success.length > 0
+                      ? _c("div", { staticClass: "notification is-success" }, [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(_vm.success) +
+                              "\n                "
+                          )
                         ])
-                      : _vm._e()
-                  ])
-                ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "columns" }, [
+                      _c("div", { staticClass: "column" }, [
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("Name")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.name,
+                                    expression: "user.name"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: { type: "text", placeholder: "Name" },
+                                domProps: { value: _vm.user.name },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "name",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("Username")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.username,
+                                    expression: "user.username"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "Username"
+                                },
+                                domProps: { value: _vm.user.username },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "username",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("Email")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.email,
+                                    expression: "user.email"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: { type: "email", placeholder: "Email" },
+                                domProps: { value: _vm.user.email },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "email",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("Current password")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.user.oldpassword,
+                                    expression: "user.oldpassword"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: {
+                                  type: "password",
+                                  placeholder: "Current password"
+                                },
+                                domProps: { value: _vm.user.oldpassword },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.user,
+                                      "oldpassword",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("New password")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.password,
+                                    expression: "password"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: {
+                                  type: "password",
+                                  placeholder: "Repeat new password"
+                                },
+                                domProps: { value: _vm.password },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.password = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field full-w" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("New password")
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "control" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.password_confirmation,
+                                    expression: "password_confirmation"
+                                  }
+                                ],
+                                staticClass: "input",
+                                attrs: {
+                                  type: "password",
+                                  placeholder: "Repeat new password"
+                                },
+                                domProps: { value: _vm.password_confirmation },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.password_confirmation =
+                                      $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "field" }, [
+                            _c("label", { staticClass: "label" }, [
+                              _vm._v("Profile picture")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "file",
+                                class: { "has-name": _vm.imageData.length > 0 }
+                              },
+                              [
+                                _c("label", { staticClass: "file-label" }, [
+                                  _c("input", {
+                                    staticClass: "file-input",
+                                    attrs: { type: "file", accept: "image/*" },
+                                    on: {
+                                      change: function($event) {
+                                        _vm.previewImage($event)
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm._m(2),
+                                  _vm._v(" "),
+                                  _vm.imageData.length > 0
+                                    ? _c("span", { staticClass: "file-name" }, [
+                                        _vm._v(_vm._s(_vm.imageName))
+                                      ])
+                                    : _vm._e()
+                                ])
+                              ]
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm.imageData.length > 0
+                          ? _c("div", { staticClass: "level" }, [
+                              _c("div", { staticClass: "image-preview" }, [
+                                _c("img", {
+                                  staticClass: "preview",
+                                  attrs: { src: _vm.imageData, alt: "image" }
+                                })
+                              ])
+                            ])
+                          : _vm._e()
+                      ])
+                    ])
+                  ]
+                )
               ]
             )
-          ]
-        )
-      ])
+          ])
+        : _vm._e()
     ]
   )
-}
+};
 var staticRenderFns = [
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "level is-mobile" }, [
       _c(
         "button",
@@ -34391,27 +34625,25 @@ var staticRenderFns = [
     ])
   },
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("div", { staticClass: "columns" }, [
       _c("div", { staticClass: "column" }, [
         _c("div", { staticClass: "level" }, [
           _c("div", { staticClass: "level-left" }, [
-            _c(
-              "h1",
-              { staticClass: "color-secondary is-size-4 has-text-white" },
-              [_vm._v("Profile")]
-            )
+            _c("h1", { staticClass: "color-secondary is-size-4" }, [
+              _vm._v("Profile")
+            ])
           ])
         ])
       ])
     ])
   },
   function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
     return _c("span", { staticClass: "file-cta" }, [
       _c("span", { staticClass: "file-icon" }, [
         _vm._v(
@@ -34426,7 +34658,7 @@ var staticRenderFns = [
       ])
     ])
   }
-]
+];
 render._withStripped = true
 
 
@@ -34445,23 +34677,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c(
     "main",
-    {
-      staticClass: "user posts background-color-primary has-text-black",
-      attrs: { id: "content" }
-    },
+    { staticClass: "user posts has-text-black", attrs: { id: "content" } },
     [
       _c("div", { staticClass: "container is-fluid" }, [
         _c("div", { staticClass: "columns is-multiline" }, [
           _c(
             "div",
             {
-              staticClass:
-                "column user__profile full-h is-3 is-12-touch has-background-white"
+              staticClass: "column user__profile shadow full-h is-3 is-12-touch"
             },
             [
               _c("div", { staticClass: "columns mg-t1" }, [
@@ -34476,28 +34704,33 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "columns is-vcentered is-flex" }, [
+              _c("div", { staticClass: "columns is-vcentered" }, [
                 _c("div", { staticClass: "user__right column" }, [
                   _c(
                     "div",
-                    { staticClass: "level is-mobile user__profile__username" },
+                    { staticClass: "level is-mobile user__profile__name" },
                     [
                       _c(
                         "a",
                         {
                           staticClass:
-                            "has-text-black mauto has-text-centered is-size-4",
+                            "user__profile__name mauto has-text-centered",
                           attrs: { href: /user/ + _vm.user.username }
                         },
-                        [_c("strong", [_vm._v(_vm._s(_vm.user.name))])]
+                        [_vm._v(_vm._s(_vm.user.name))]
                       )
                     ]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "level has-text-centered" }, [
-                    _c("span", { staticClass: "mauto has-text-center" }, [
-                      _vm._v("@" + _vm._s(_vm.user.username))
-                    ])
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "mauto has-text-center user__profile__username"
+                      },
+                      [_vm._v("@" + _vm._s(_vm.user.username))]
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "level is-mobile" }, [
@@ -34558,61 +34791,74 @@ var render = function() {
               _vm._v(" "),
               _c("hr"),
               _vm._v(" "),
-              _c("div", { staticClass: "columns" }, [
+              _c("div", { staticClass: "columns is-flex-mobile" }, [
                 _c("div", { staticClass: "column" }, [
-                  _c("div", { staticClass: "level" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "has-text-black",
-                        attrs: { "data-type": "tweets" },
-                        on: {
-                          click: function($event) {
-                            _vm.changeView($event)
-                          }
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "user__profile__type has-text-centered c-pointer",
+                      attrs: { "data-type": "tweets" },
+                      on: {
+                        click: function($event) {
+                          _vm.changeView($event)
                         }
-                      },
-                      [_vm._v("Tweets")]
-                    ),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countPosts))])
-                  ]),
+                      }
+                    },
+                    [_vm._v("Tweets")]
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "level" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "has-text-black",
-                        attrs: { "data-type": "followings" },
-                        on: {
-                          click: function($event) {
-                            _vm.changeView($event)
-                          }
+                  _c(
+                    "p",
+                    { staticClass: "user__profile__count has-text-centered" },
+                    [_vm._v(_vm._s(_vm.user.countPosts))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column" }, [
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "user__profile__type has-text-centered c-pointer",
+                      attrs: { "data-type": "followings" },
+                      on: {
+                        click: function($event) {
+                          _vm.changeView($event)
                         }
-                      },
-                      [_vm._v("Followings")]
-                    ),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowings))])
-                  ]),
+                      }
+                    },
+                    [_vm._v("Followings")]
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "level" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "has-text-black",
-                        attrs: { "data-type": "followers" },
-                        on: {
-                          click: function($event) {
-                            _vm.changeView($event)
-                          }
+                  _c(
+                    "p",
+                    { staticClass: "user__profile__count has-text-centered" },
+                    [_vm._v(_vm._s(_vm.user.countFollowings))]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column" }, [
+                  _c(
+                    "p",
+                    {
+                      staticClass:
+                        "user__profile__type has-text-centered c-pointer",
+                      attrs: { "data-type": "followers" },
+                      on: {
+                        click: function($event) {
+                          _vm.changeView($event)
                         }
-                      },
-                      [_vm._v("Followers")]
-                    ),
-                    _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.user.countFollowers))])
-                  ])
+                      }
+                    },
+                    [_vm._v("Followers")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "p",
+                    { staticClass: "user__profile__count has-text-centered" },
+                    [_vm._v(_vm._s(_vm.user.countFollowers))]
+                  )
                 ])
               ])
             ]
@@ -34626,14 +34872,9 @@ var render = function() {
                 _c("div", { staticClass: "column pd0" }, [
                   _c("div", { staticClass: "level" }, [
                     _c("div", { staticClass: "level-left" }, [
-                      _c(
-                        "h1",
-                        {
-                          staticClass:
-                            "color-secondary is-size-4 has-text-white"
-                        },
-                        [_vm._v(_vm._s(_vm.title))]
-                      )
+                      _c("h1", { staticClass: "color-secondary is-size-4" }, [
+                        _vm._v(_vm._s(_vm.title))
+                      ])
                     ])
                   ])
                 ])
@@ -34676,8 +34917,8 @@ var render = function() {
       ])
     ]
   )
-}
-var staticRenderFns = []
+};
+var staticRenderFns = [];
 render._withStripped = true
 
 
@@ -34713,12 +34954,12 @@ function normalizeComponent (
   // Vue.extend constructor export interop
   var options = typeof scriptExports === 'function'
     ? scriptExports.options
-    : scriptExports
+    : scriptExports;
 
   // render functions
   if (render) {
-    options.render = render
-    options.staticRenderFns = staticRenderFns
+    options.render = render;
+    options.staticRenderFns = staticRenderFns;
     options._compiled = true
   }
 
@@ -34732,14 +34973,14 @@ function normalizeComponent (
     options._scopeId = 'data-v-' + scopeId
   }
 
-  var hook
+  var hook;
   if (moduleIdentifier) { // server build
     hook = function (context) {
       // 2.3 injection
       context =
         context || // cached call
         (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
       // 2.2 with runInNewContext: true
       if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
         context = __VUE_SSR_CONTEXT__
@@ -34752,7 +34993,7 @@ function normalizeComponent (
       if (context && context._registeredComponents) {
         context._registeredComponents.add(moduleIdentifier)
       }
-    }
+    };
     // used by ssr in case component is cached and beforeCreate
     // never gets called
     options._ssrRegister = hook
@@ -34766,16 +35007,16 @@ function normalizeComponent (
     if (options.functional) {
       // for template-only hot-reload because in that case the render fn doesn't
       // go through the normalizer
-      options._injectStyles = hook
+      options._injectStyles = hook;
       // register for functioal component in vue file
-      var originalRender = options.render
+      var originalRender = options.render;
       options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
+        hook.call(context);
         return originalRender(h, context)
       }
     } else {
       // inject component registration as beforeCreate hook
-      var existing = options.beforeCreate
+      var existing = options.beforeCreate;
       options.beforeCreate = existing
         ? [].concat(existing, hook)
         : [hook]
@@ -35666,7 +35907,7 @@ methodsToPatch.forEach(function (method) {
       case 'push':
       case 'unshift':
         inserted = args;
-        break
+        break;
       case 'splice':
         inserted = args.slice(2);
         break
@@ -41382,14 +41623,14 @@ function parseFilters (exp) {
       }
     } else {
       switch (c) {
-        case 0x22: inDouble = true; break         // "
-        case 0x27: inSingle = true; break         // '
-        case 0x60: inTemplateString = true; break // `
-        case 0x28: paren++; break                 // (
-        case 0x29: paren--; break                 // )
-        case 0x5B: square++; break                // [
-        case 0x5D: square--; break                // ]
-        case 0x7B: curly++; break                 // {
+        case 0x22: inDouble = true; break;         // "
+        case 0x27: inSingle = true; break;         // '
+        case 0x60: inTemplateString = true; break; // `
+        case 0x28: paren++; break;                 // (
+        case 0x29: paren--; break;                 // )
+        case 0x5B: square++; break;                // [
+        case 0x5D: square--; break;                // ]
+        case 0x7B: curly++; break;                 // {
         case 0x7D: curly--; break                 // }
       }
       if (c === 0x2f) { // /
@@ -46065,11 +46306,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Auth/LoginComponent.vue"
+component.options.__file = "resources/js/components/Auth/LoginComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46134,11 +46375,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Auth/RegisterComponent.vue"
+component.options.__file = "resources/js/components/Auth/RegisterComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46203,11 +46444,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Common/FollowComponent.vue"
+component.options.__file = "resources/js/components/Common/FollowComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46272,11 +46513,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Common/PostComponent.vue"
+component.options.__file = "resources/js/components/Common/PostComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46341,11 +46582,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   "00daed84",
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Post/PostsComponent.vue"
+component.options.__file = "resources/js/components/Post/PostsComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46410,11 +46651,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Profile/ProfileComponent.vue"
+component.options.__file = "resources/js/components/Profile/ProfileComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
@@ -46479,11 +46720,11 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null
   
-)
+);
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/User/UserComponent.vue"
+component.options.__file = "resources/js/components/User/UserComponent.vue";
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),

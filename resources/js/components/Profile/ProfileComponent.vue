@@ -1,24 +1,25 @@
 <template>
-    <main id="content" class="user posts background-color-primary has-text-black">
-        <div class="container is-fluid">
-            <form @submit.prevent="updateUser(user.username)" enctype="multipart/form-data" class="columns is-multiline">
-                <div class="column user__profile full-h is-3 is-12-touch has-background-white">
+    <main id="content" class="user posts has-text-black">
+        <div v-if="user" class="container is-fluid">
+            <form @submit.prevent="updateUser(user.username)" enctype="multipart/form-data"
+                  class="columns is-multiline">
+                <div class="column user__profile shadow full-h is-3 is-12-touch">
                     <div class="columns mg-t1">
                         <div class="column user__profile__top">
-                            <div class="user__profile__top__img"
+                            <div v-if="imageData" class="user__profile__top__img"
                                  :style=" `background: url(${imageData}) no-repeat center center / cover`"></div>
+                            <div v-else class="user__profile__top__img"
+                                 :style=" `background: url('/storage/avatars/${user.image}') no-repeat center center / cover`"></div>
                         </div>
                     </div>
-                    <div class="columns is-vcentered is-flex">
+                    <div class="columns is-vcentered">
                         <div class="user__right column">
-                            <div class="level is-mobile user__profile__username">
-                                <a class="has-text-black mauto has-text-centered is-size-4"
-                                   :href="/user/ + user.username">
-                                    <strong>{{ user.name }}</strong>
-                                </a>
+                            <div class="level is-mobile user__profile__name">
+                                <a class="user__profile__name mauto has-text-centered"
+                                   :href="/user/ + user.username">{{ user.name }}</a>
                             </div>
                             <div class="level has-text-centered">
-                                <span class="mauto has-text-center">@{{ user.username }}</span>
+                                <span class="mauto has-text-center user__profile__username">@{{ user.username }}</span>
                             </div>
                             <div class="level is-mobile">
                                 <button type="submit" class="button is-success has-text-white mauto">Save</button>
@@ -26,22 +27,18 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="columns">
+                    <div class="columns is-flex-mobile">
                         <div class="column">
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="tweets" class="has-text-black">Tweets</a>
-                                <span>{{ user.countPosts }}</span>
-                            </div>
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="followings"
-                                   class="has-text-black">Followings</a>
-                                <span>{{ user.countFollowings }}</span>
-                            </div>
-                            <div class="level">
-                                <a @click="changeView($event)" data-type="followers"
-                                   class="has-text-black">Followers</a>
-                                <span>{{ user.countFollowers }}</span>
-                            </div>
+                            <p class="user__profile__type has-text-centered">Tweets</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countPosts }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="user__profile__type has-text-centered">Followings</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowings }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="user__profile__type has-text-centered">Followers</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowers }}</p>
                         </div>
                     </div>
                 </div>
@@ -50,21 +47,25 @@
                         <div class="column">
                             <div class="level">
                                 <div class="level-left">
-                                    <h1 class="color-secondary is-size-4 has-text-white">Profile</h1>
+                                    <h1 class="color-secondary is-size-4">Profile</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div v-if="errors.message || errors.username || errors.name" class="notification is-danger">
-                        <p v-if="errors.message > 0">- {{ errors.message }}</p>
+                    <div v-if="errors.name || errors.username || errors.email || errors.password" class="notification is-danger">
                         <p v-if="errors.name.length > 0" v-for="error in errors.name">- {{ error }}</p>
                         <p v-if="errors.username.length > 0" v-for="error in errors.username">- {{ error }}</p>
+                        <p v-if="errors.email.length > 0" v-for="error in errors.email">- {{ error }}</p>
+                        <p v-if="errors.password.length > 0" v-for="error in errors.password">- {{ error }}</p>
+                    </div>
+                    <div v-if="success.length > 0" class="notification is-success">
+                        {{ success }}
                     </div>
                     <div class="columns">
                         <div class="column">
                             <div class="level">
                                 <div class="field full-w">
-                                    <label class="label has-text-white">Name</label>
+                                    <label class="label">Name</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Name" v-model="user.name">
                                     </div>
@@ -72,15 +73,47 @@
                             </div>
                             <div class="level">
                                 <div class="field full-w">
-                                    <label class="label has-text-white">Username</label>
+                                    <label class="label">Username</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Username" v-model="user.username">
                                     </div>
                                 </div>
                             </div>
                             <div class="level">
+                                <div class="field full-w">
+                                    <label class="label">Email</label>
+                                    <div class="control">
+                                        <input class="input" type="email" placeholder="Email" v-model="user.email">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="field full-w">
+                                    <label class="label">Current password</label>
+                                    <div class="control">
+                                        <input class="input" type="password" placeholder="Current password" v-model="user.oldpassword">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="field full-w">
+                                    <label class="label">New password</label>
+                                    <div class="control">
+                                        <input class="input" type="password" placeholder="Repeat new password" v-model="password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
+                                <div class="field full-w">
+                                    <label class="label">New password</label>
+                                    <div class="control">
+                                        <input class="input" type="password" placeholder="Repeat new password" v-model="password_confirmation">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="level">
                                 <div class="field">
-                                    <label class="label has-text-white">Profile picture</label>
+                                    <label class="label">Profile picture</label>
                                     <div class="file" :class="{ 'has-name': imageData.length > 0 }">
                                         <label class="file-label">
                                             <input type="file" class="file-input" @change="previewImage($event)"
@@ -93,14 +126,14 @@
                                                 Choose a file…
                                             </span>
                                         </span>
-                                            <span v-if="imageData.length > 0" class="file-name has-text-white">{{ imageName }}</span>
+                                            <span v-if="imageData.length > 0" class="file-name">{{ imageName }}</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="level" v-if="imageData.length > 0">
                                 <div class="image-preview">
-                                    <img class="preview" :src="imageData">
+                                    <img class="preview" :src="imageData" alt="image">
                                 </div>
                             </div>
                         </div>
@@ -128,14 +161,17 @@
 				username: '',
 				user: {
 					followers: '',
-					followings: ''
+					followings: '',
 				},
-                image: '',
+				oldpassword: '',
+				password: '',
+				password_confirmation: '',
+				image: '',
 				imageName: '',
 				imageData: '',
 				followtext: '',
+                success: '',
 				errors: {
-					message: '',
 					name: '',
 					username: '',
 				}
@@ -145,9 +181,7 @@
 			getUser(username) {
 				axios.get(`/api/userc/${username}`)
 					.then((response) => this.user = response.data)
-					.catch((error) => {
-						if (500 == error.response.status) window.location.href = '/'
-					})
+					.catch((error) => console.log(error))
 			},
 			previewImage(event) {
 				let input = event.target;
@@ -158,26 +192,28 @@
 
 					reader.onload = (e) => {
 						this.imageData = e.target.result;
-					}
+					};
 					reader.readAsDataURL(input.files[0]);
 				}
 			},
 			updateUser(username) {
-				const formData = new FormData()
-				formData.append('image', this.image, this.image.name)
-				console.log(formData.get('image'));
-				formData.append('name', this.user.name)
-				formData.append('username', username)
+				this.success = '';
+				const formData = new FormData();
+				formData.append('name', this.user.name);
+				formData.append('username', username);
+				formData.append('email', this.user.email);
+                formData.append('oldpassword', this.user.oldpassword);
+                formData.append('password', this.password);
+                formData.append('password_confirmation', this.password_confirmation);
+				formData.append('image', this.image, this.image.name);
 				axios.post('/api/user/profile', formData, {headers: {'content-type': 'multipart/form-data'}})
 					.then((reponse) => {
-						console.log(reponse)
-                        this.errors = '';
+						this.errors = {};
+						this.success = reponse.data
 					})
 					.catch((error) => {
-						console.log(error.response.data);
-						this.errors.message = error.response.data.message;
-						this.errors.name = error.response.data.errors.name;
-						this.errors.username = error.response.data.errors.username;
+						this.errors = {};
+						this.errors = error.response.data.errors;
 					})
 			}
 		},

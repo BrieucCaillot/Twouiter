@@ -1,18 +1,54 @@
 .user {
+  &__posts {
+    border-radius: 8px;
+    padding: 3px;
+    @extend .background-color-secondary;
+
+    &__top {
+      height: inherit;
+      &__img {
+        height: 70px;
+        width: 70px;
+        margin: 0 auto;
+        border-radius: 50%;
+      }
+    }
+  }
+
   &__profile {
     border-radius: 8px;
+    @extend .background-color-secondary;
+
     &__top {
-      height: 170px;
+      height: 140px;
       margin: 0 auto;
-      max-width: 170px;
+      max-width: 140px;
       &__img {
         height: 100%;
         border-radius: 50%;
       }
     }
 
-    &__username {
+    &__name {
       margin-bottom: 3px !important;
+      font-weight: 700;
+      @extend .is-size-4;
+      @extend .has-text-white;
     }
+
+    &__username {
+      @extend .has-text-white;
+    }
+
+    &__type {
+      @extend .is-size-7;
+      @extend .has-text-white;
+    }
+
+    &__count {
+      @extend .color-primary;
+      @extend .is-size-5;
+    }
+
   }
 }

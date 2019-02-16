@@ -62,13 +62,10 @@
 				})
 					.then((response) => (response.status == 200) ? location.reload() : null)
 					.catch((error) => {
-						this.errors.username = error.response.data.errors.username
-						this.errors.password = error.response.data.errors.password
+						this.errors = {};
+						this.errors = error.response.data.errors;
 					})
 			}
-		},
-		mounted() {
-			console.log(this.errors.username.length)
 		}
 	}
 </script>

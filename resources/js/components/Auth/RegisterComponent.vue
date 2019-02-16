@@ -98,10 +98,8 @@
 				})
 					.then((response) => (response.status == 200) ? location.reload() : null)
 					.catch((error) => {
-						console.log(error);
-						this.errors.username = error.response.data.errors.username
-						this.errors.email = error.response.data.errors.email
-						this.errors.password = error.response.data.errors.password
+						this.errors = {};
+						this.errors = error.response.data.errors;
 					})
 			}
 		}

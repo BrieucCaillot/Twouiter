@@ -1,7 +1,7 @@
 .posts {
-  padding: 80px 0;
+  padding: 50px 0;
   @media screen and (max-width: 1088px) {
-    padding: 120px 30px 30px 30px;
+    padding: 50px 30px 50px 30px;
   }
 
   &__center {
@@ -11,30 +11,9 @@
     }
   }
 
-  &__user {
-    border-radius: 8px;
-    padding: 3px;
-
-    &__left {
-      flex: none;
-
-      &__img {
-        height: 70px;
-        width: 70px;
-        border-radius: 50%;
-      }
-    }
-
-    &__right {
-      &__top {
-        margin-bottom: 3px !important;
-      }
-    }
-  }
-
   &__newpost {
     border-radius: 8px;
-    padding: 15px;
+    padding: 7px;
   }
 
   &__post {
@@ -68,14 +47,14 @@
       }
 
       &__name {
-        word-break: break-all;
-        color: #14171a;
-        font-weight: bold;
+        @extend .has-text-black;
+        font-weight: 700;
         padding-right: 7px;
       }
 
       &__username {
         color: grey;
+        @extend .is-size-7;
       }
 
       &__date {

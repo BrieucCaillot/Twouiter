@@ -3,10 +3,10 @@
         <div class="column">
             <div class="columns">
                 <div class="column">
-                    <div class="posts__post mg-t1 has-background-white columns is-vcentered is-flex">
+                    <div class="posts__post shadow mg-t1 has-background-white columns is-vcentered is-flex">
                         <div class="column posts__post__left">
                             <a :href="/user/ + post.username">
-                                <div :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"
+                                <div :style="`background: url(/storage/avatars/${post.image}) no-repeat center center / cover`"
                                      class="posts__post__left__img"></div>
                             </a>
                         </div>
@@ -31,5 +31,8 @@
 	export default {
 		name: "FollowComponent",
         props: ['post'],
+        mounted() {
+			console.log(this.post)
+        }
 	}
 </script>

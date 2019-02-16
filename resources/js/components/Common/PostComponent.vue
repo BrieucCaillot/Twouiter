@@ -1,21 +1,19 @@
 <template>
     <div class="columns">
         <div class="column">
-            <div class="posts__post mg-t1 has-background-white columns is-flex"
+            <div class="posts__post shadow mg-t1 has-background-white columns is-flex"
                  :class="(userIdConnected == user.id) ? 'posts__post__delete' : 'unauthorized'">
                 <a href="void:javascript()" @click="deleteTweet($event)" class="delete-post"></a>
                 <div class="column posts__post__left">
                     <a :href="/user/ + user.username">
-                        <div :style="`background: url(storage/avatars/${user.image}) no-repeat center center / cover`"
+                        <div :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"
                              class="posts__post__left__img"></div>
                     </a>
                 </div>
                 <div class="column posts__post__right">
                     <div class="level is-mobile posts__post__right__top has-text-left">
                         <div class="level-left">
-                            <a :href="/user/ + user.username">
-                                <strong class="posts__post__right__name">{{ user.name }}</strong>
-                            </a>
+                            <a class="posts__post__right__name" :href="/user/ + user.username">{{ user.name }}</a>
                             <span class="posts__post__right__username">@{{ user.username }}</span>
                         </div>
                         <div class="level-right">

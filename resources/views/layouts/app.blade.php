@@ -11,14 +11,14 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,700" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 <header class="over-hide">
-    <nav class="navbar is-fixed-top has-background-white" role="navigation" aria-label="main navigation">
+    <nav class="navbar is-fixed-top background-color-secondary" role="navigation" aria-label="main navigation">
         <div class="container">
             <div class="navbar-brand">
                 <a href="/" class="navbar-item">
@@ -53,8 +53,11 @@
                         </div>
                     @else
                         <div class="navbar-item">
-                            <a href="/user/{{ Auth::user()->username }}" class="has-text-black pd-r2" href="#">
+                            <a href="/user/{{ Auth::user()->username }}" class="has-text-white pd-r1" href="#">
                                 {{ Auth::user()->name }}
+                            </a>
+                            <a href="/user/{{ Auth::user()->username }}" class="pd-r2" href="#">
+                                <div class="user__profile__img" style="background: url({{asset('storage/avatars/'. Auth::user()->image)}}) no-repeat center center / cover"></div>
                             </a>
                             <a class="button background-color-primary has-text-white"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

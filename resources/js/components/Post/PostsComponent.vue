@@ -1,56 +1,65 @@
 <template>
-    <main id="content" class="posts background-color-primary">
+    <main id="content" class="posts">
         <div class="container is-fluid">
-            <div class="columns is-multiline">
-                <div class="column is-3 is-12-touch">
-                    <div class="columns is-vcentered posts__user is-flex has-background-white">
-                        <div class="posts__user__left column ">
-                            <div :style="`background: url(storage/avatars/${user.image}) no-repeat center center / cover`"
-                                 class="posts__user__left__img"></div>
+            <div v-if="user" class="columns is-multiline">
+                <div class="column user__profile shadow full-h is-3 is-12-touch">
+                    <div class="columns mg-t1">
+                        <div class="column user__profile__top">
+                            <div class="user__profile__top__img"
+                                 :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"></div>
                         </div>
-                        <div class="posts__user__right column has-text-black">
-                            <div class="level posts__user__right__top">
-                                <a :href="/user/ + user.username"><strong class="is-size-5 has-text-black">{{ user.name }}</strong></a>
+                    </div>
+                    <div class="columns is-vcentered">
+                        <div class="user__right column">
+                            <div class="level is-mobile user__profile__name">
+                                <a class="user__profile__name mauto has-text-centered"
+                                   :href="/user/ + user.username">{{ user.name }}</a>
                             </div>
-                            <div class="level">
-                                <p>@{{ user.username }}</p>
+                            <div class="level has-text-centered">
+                                <span class="mauto has-text-center user__profile__username">@{{ user.username }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="columns posts__user has-background-white has-text-black mg-t2">
+                    <hr>
+                    <div class="columns is-flex-mobile">
                         <div class="column">
-                            <div class="level">
-                                <span class="has-text-black">Tweets</span>
-                                <span>{{ user.countPosts }}</span>
-                            </div>
-                            <div class="level">
-                                <span class="has-text-black">Followings</span>
-                                <span>{{ user.countFollowings }}</span>
-                            </div>
-                            <div class="level">
-                                <span class="has-text-black">Followers</span>
-                                <span>{{ user.countFollowers }}</span>
-                            </div>
+                            <p class="user__profile__type has-text-centered">Tweets</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countPosts }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="user__profile__type has-text-centered">Followings</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowings }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="user__profile__type has-text-centered">Followers</p>
+                            <p class="user__profile__count has-text-centered">{{ user.countFollowers }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="column is-6 is-12-touch posts__center">
-                    <div class="posts__newpost columns has-background-white has-text-white">
+                    <div class="posts__newpost shadow columns background-color-secondary has-text-white">
                         <div class="column">
                             <form @submit.prevent="newTweet()" method="POST">
                                 <div class="level">
-                                    <h1 class="is-size-4 has-text-black">Quoi de neuf ?</h1>
+                                    <h1 class="is-size-4">Whats up ?</h1>
                                 </div>
                                 <div class="level">
-                                    <textarea class="textarea" rows="2" type="text" v-model="message" placeholder="Whats up ?"></textarea>
+                                    <textarea class="textarea" rows="2" type="text" v-model="message"
+                                              placeholder="Your message"></textarea>
                                 </div>
                                 <div class="level">
-                                    <button class="button background-color-primary has-text-white" type="submit">Send</button>
+                                    <div class="level-left"></div>
+                                    <div class="level-right">
+                                        <button class="button background-color-primary has-text-white" type="submit">
+                                            Send
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user" :userIdConnected="user.id"></PostComponent>
+                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user"
+                                   :userIdConnected="user.id"></PostComponent>
                 </div>
             </div>
         </div>
@@ -59,13 +68,13 @@
 
 <script>
 
-    import PostComponent from '../Common/PostComponent';
+	import PostComponent from '../Common/PostComponent';
 
 	export default {
 		name: "Posts",
-        components: {
-		    PostComponent
-        },
+		components: {
+			PostComponent
+		},
 		data() {
 			return {
 				message: '',
@@ -84,7 +93,7 @@
 								this.message = '';
 								this.getUser();
 								this.getPosts();
-							};
+							}
 						})
 						.catch((error) => {
 							console.log(error);
@@ -99,18 +108,18 @@
 			getPosts() {
 				axios.get('/api/allposts')
 					.then((response) => {
-						console.log(response)
+						console.log(response);
 						this.allPosts = response.data
-                    })
+					})
 					.catch((error) => console.log(error))
 			}
 		},
 		beforeMount() {
-			this.getUser()
-			this.getPosts()
-            setInterval(() => {
-	            this.getPosts()
-            }, 60000)
+			this.getUser();
+			this.getPosts();
+			setInterval(() => {
+				this.getPosts()
+			}, 60000)
 		}
 	}
 </script>
