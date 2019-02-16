@@ -1,9 +1,9 @@
 <template>
     <main id="content" class="user posts has-text-black">
-        <div class="container is-fluid">
+        <div v-if="user" class="container is-fluid">
             <div class="columns is-multiline">
                 <div class="column user__profile shadow full-h is-3 is-12-touch">
-                    <div class="columns mg-t1">
+                    <div v-if="user.image" class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
                                  :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"></div>

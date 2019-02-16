@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
@@ -21,7 +22,12 @@ class ProfileController extends Controller
         return redirect()->route('user.profile', ['username' => Auth::user()->username]);
     }
 
-    public function update(Request $request) {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|string
+     */
+    public function update(Request $request)
+    {
         if (Auth::check()) {
 
             $user = Auth::user();
@@ -40,8 +46,9 @@ class ProfileController extends Controller
                 $user->password = bcrypt($request->password);
 
                 if (isset($request->image)) {
-                    $avatarName = $user->id.'_'.time().'.'.request()->image->getClientOriginalExtension();
-                    $request->file('image')->storeAs('avatars',$avatarName);
+                    $avatarName = $user->id . '_' . time() . '.' . request()->image->getClientOriginalExtension();
+                    $resize = Image::make($request->file('image'))->fit(300)->encode('jpg');
+                    Storage::put('avatars/' . $avatarName, $resize);
                     $user->image = $avatarName;
                 }
 
