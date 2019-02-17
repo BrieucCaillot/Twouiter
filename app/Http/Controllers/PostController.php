@@ -62,7 +62,7 @@ class PostController extends Controller
     public function posts($username = null)
     {
         if ($username !== null) {
-            $user = User::where('username', 'like', $username)->first();
+            $user = User::where('username', $username)->first();
             $userPosts = $user->posts()->paginate(10);
             foreach ($userPosts as $post) {
                 $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
@@ -85,7 +85,7 @@ class PostController extends Controller
      * @return mixed
      */
     public function deletePost($postId) {
-        $post = Post::where('id', 'like', $postId)->delete();
+        $post = Post::where('id', $postId)->delete();
         return $post;
     }
 }

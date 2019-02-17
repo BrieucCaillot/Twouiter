@@ -2146,6 +2146,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Posts",
@@ -4033,6 +4035,7 @@ var render = function() {
                               ],
                               staticClass: "textarea",
                               attrs: {
+                                required: "",
                                 rows: "2",
                                 type: "text",
                                 placeholder: "Your message"
@@ -4049,7 +4052,33 @@ var render = function() {
                             })
                           ]),
                           _vm._v(" "),
-                          _vm._m(1)
+                          _c("div", { staticClass: "level" }, [
+                            _c("div", { staticClass: "level-left" }, [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(_vm.message.length) +
+                                  " / 250\n                                "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "level-right" }, [
+                              _vm.message.length < 250
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass:
+                                        "button background-color-primary has-text-white",
+                                      attrs: { type: "submit" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                        Send\n                                    "
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ])
+                          ])
                         ]
                       )
                     ])
@@ -4108,29 +4137,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "level" }, [
       _c("h1", { staticClass: "is-size-4" }, [_vm._v("Whats up ?")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "level" }, [
-      _c("div", { staticClass: "level-left" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "level-right" }, [
-        _c(
-          "button",
-          {
-            staticClass: "button background-color-primary has-text-white",
-            attrs: { type: "submit" }
-          },
-          [
-            _vm._v(
-              "\n                                        Send\n                                    "
-            )
-          ]
-        )
-      ])
     ])
   }
 ]

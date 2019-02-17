@@ -24,7 +24,7 @@ class UserController extends Controller
     public function user($username = null)
     {
         if ($username !== null) {
-            $user = User::where('username', 'like', $username)->first();
+            $user = User::where('username', $username)->first();
             $user->countPosts = $user->posts->count();
             $user->countFollowings = $user->followings->count();
             $user->countFollowers = $user->followers->count();

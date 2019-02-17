@@ -44,13 +44,15 @@
                                     <h1 class="is-size-4">Whats up ?</h1>
                                 </div>
                                 <div class="level">
-                                    <textarea class="textarea" rows="2" type="text" v-model="message"
+                                    <textarea required class="textarea" rows="2" type="text" v-model="message"
                                               placeholder="Your message"></textarea>
                                 </div>
                                 <div class="level">
-                                    <div class="level-left"></div>
+                                    <div class="level-left">
+                                        {{ message.length }} / 250
+                                    </div>
                                     <div class="level-right">
-                                        <button class="button background-color-primary has-text-white" type="submit">
+                                        <button v-if="message.length < 250" class="button background-color-primary has-text-white" type="submit">
                                             Send
                                         </button>
                                     </div>
