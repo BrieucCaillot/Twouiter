@@ -11331,10 +11331,39 @@ body {
   background-color: #1da1f2;
 }
 
+.background-color-primary:hover {
+  background-color: #0085d6;
+}
+
 .background-color-secondary,
 .user__posts,
 .user__profile {
   background-color: #282a3c;
+}
+
+.is-success {
+  background-color: #23A460 !important;
+}
+
+.is-success:hover {
+  background-color: #239D60 !important;
+  color: #ffffff !important;
+}
+
+.is-danger {
+  background-color: #bd144d !important;
+}
+
+.is-danger:hover {
+  background-color: #b71535 !important;
+  color: #ffffff !important;
+}
+
+a.has-text-white:hover,
+a.user__profile__name:hover,
+a.user__profile__username:hover,
+a.user__profile__type:hover {
+  color: #ffffff !important;
 }
 
 .over-hide {
@@ -11875,12 +11904,7 @@ img.preview {
   box-shadow: none !important;
 }
 
-.button.is-success:hover {
-  background-color: #23B960;
-}
-
-.button.background-color-white:hover,
-.button .background-color-primary:hover {
+.button.background-color-white:hover {
   background-color: #0F71CC;
   color: #ffffff !important;
 }

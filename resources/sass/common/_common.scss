@@ -3,21 +3,51 @@ html, body {
   font-family: 'Poppins', sans-serif;
   background-color: #F2F3F7;
 }
+
 $primary: #1da1f2;
 $secondary: #282a3c;
 
 .color-primary {
-  color: $primary
+  color: $primary;
 }
+
 .color-secondary {
-  color: $secondary
+  color: $secondary;
 }
 
 .background-color-primary {
-  background-color: $primary
+  background-color: $primary;
+  &:hover {
+    background-color: #0085d6;
+  }
 }
+
 .background-color-secondary {
-  background-color: $secondary
+  background-color: $secondary;
+}
+
+.is-success {
+  background-color: #23A460 !important;
+
+  &:hover {
+    background-color: #239D60 !important;
+    color: #ffffff !important;
+  }
+}
+
+.is-danger {
+  background-color: #bd144d !important;
+
+  &:hover {
+    background-color: #b71535 !important;
+    color: #ffffff !important;
+  }
+}
+
+a.has-text-white {
+  &:hover {
+    color: #ffffff !important;
+  }
 }
 
 .over-hide {
@@ -27,6 +57,7 @@ $secondary: #282a3c;
 .full-w {
   width: 100%;
 }
+
 .full-h {
   height: 100%;
 }
@@ -40,18 +71,18 @@ $secondary: #282a3c;
 }
 
 .shadow {
-  box-shadow: 0px 1px 15px 1px rgba(69,65,78,0.08);
+  box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.08);
 }
 
 @for $i from 0 through 10 {
-.mg#{$i} {
-margin: 10px*$i;
-}
-.pd#{$i} {
-padding: 10px*$i;
-}
+  .mg#{$i} {
+    margin: 10px*$i;
+  }
+  .pd#{$i} {
+    padding: 10px*$i;
+  }
 
-/*////////MARGIN////////*/
+  /*////////MARGIN////////*/
   .mg-b#{$i} {
     margin-bottom: 10px*$i;
   }

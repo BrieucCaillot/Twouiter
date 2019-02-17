@@ -8,12 +8,7 @@
     box-shadow: none !important;
   }
 
-  &.is-success {
-    &:hover {
-      background-color: #23B960;
-    }
-  }
-  &.background-color-white, .background-color-primary {
+  &.background-color-white {
     &:hover {
       background-color: #0F71CC;
       color: #ffffff !important;
