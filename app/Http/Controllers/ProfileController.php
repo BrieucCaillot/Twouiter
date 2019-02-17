@@ -34,7 +34,7 @@ class ProfileController extends Controller
 
             $request->validate([
                 'name' => ['required', 'string', 'max:25'],
-                'username' => ['required', 'string', 'max:18', 'unique:users,email,'.$user->id],
+                'username' => ['required', 'string', 'max:18', 'unique:users,username,'.$user->id],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
                 'password' => ['required', 'string', 'min:6', 'confirmed']
             ]);
