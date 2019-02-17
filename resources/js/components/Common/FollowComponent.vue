@@ -31,8 +31,5 @@
 	export default {
 		name: "FollowComponent",
         props: ['post'],
-        mounted() {
-			console.log(this.post)
-        }
 	}
 </script>

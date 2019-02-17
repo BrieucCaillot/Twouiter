@@ -47,7 +47,7 @@ class PostController extends Controller
             $query->select('user_id')
                 ->from('followers')
                 ->where('follower_id', $id);
-        })->orWhere('user_id', $id)->latest()->get();
+        })->orWhere('user_id', $id)->latest()->paginate(10);
         foreach ($posts as $post) {
             $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
             $post->user = User::find($post->user_id);
@@ -63,7 +63,7 @@ class PostController extends Controller
     {
         if ($username !== null) {
             $user = User::where('username', 'like', $username)->first();
-            $userPosts = $user->posts;
+            $userPosts = $user->posts()->paginate(10);
             foreach ($userPosts as $post) {
                 $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
                 $post->user = User::find($post->user_id);
@@ -71,7 +71,7 @@ class PostController extends Controller
 
         } else {
             $user = Auth::user();
-            $userPosts = $user->posts;
+            $userPosts = $user->posts()->paginate(10);
             foreach ($userPosts as $post) {
                 $post->human_date = Carbon::parse($post->created_at)->diffForHumans();
                 $post->user = User::find($post->user_id);

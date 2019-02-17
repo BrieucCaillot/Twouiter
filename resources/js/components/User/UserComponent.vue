@@ -57,14 +57,25 @@
                             </div>
                         </div>
                     </div>
-                    <PostComponent v-if="selected.tweets && posts.length > 0" v-for="post in posts" :key="post.id"
+                    <PostComponent v-if="selected == 'tweets' && posts.data.length > 0" v-for="post in posts.data" :key="post.id"
                                    :post="post" :user="post.user" :userIdConnected="userIdConnected"></PostComponent>
-                    <FollowComponent v-if="selected.followings && user.followings.length > 0"
-                                     v-for="following in user.followings" :key="following.id"
+                    <FollowComponent v-if="selected == 'followings' && user.paginateFollowings.data.length > 0"
+                                     v-for="following in user.paginateFollowings.data" :key="following.id"
                                      :post="following"></FollowComponent>
-                    <FollowComponent v-if="selected.followers && user.followers.length > 0"
-                                     v-for="follower in user.followers" :key="follower.id"
+                    <FollowComponent v-if="selected == 'followers' && user.paginateFollowers.data.length > 0"
+                                     v-for="follower in user.paginateFollowers.data" :key="follower.id"
                                      :post="follower"></FollowComponent>
+                    <div class="columns mg-t2">
+                        <div class="column">
+                            <div class="level">
+                                <div class="level-item">
+                                    <button v-if="posts.next_page_url !== null && selected == 'tweets'" @click="showMorePosts()" class="button background-color-primary has-text-white">Show more</button>
+                                    <button v-else-if="user.paginateFollowings.next_page_url !== null && selected == 'followings'" @click="showMoreFollowings()" class="button background-color-primary has-text-white">Show more</button>
+                                    <button v-else-if="user.paginateFollowers.next_page_url !== null && selected == 'followers'" @click="showMoreFollowers()" class="button background-color-primary has-text-white">Show more</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,16 +99,14 @@
 				username: '',
 				user: {
 					followers: '',
-					followings: ''
+					followings: '',
+					paginateFollowings: '',
+					paginateFollowers: ''
 				},
 				posts: '',
 				title: 'Latest tweets',
 				followtext: '',
-				selected: {
-					tweets: true,
-					followings: false,
-					followers: false,
-				}
+                selected: 'tweets'
 			}
 		},
 		computed: {
@@ -106,7 +115,6 @@
 					for (let user in this.user.followers) {
 						if (this.user.followers[user].id == this.userIdConnected) {
 							this.followtext = "Unfollow";
-							console.log('if', this.followtext);
 							return false;
 						}
 					}
@@ -130,6 +138,37 @@
 						if (500 == error.response.status) window.location.href = '/'
 					})
 			},
+			showMorePosts() {
+				axios.get(this.posts.next_page_url)
+					.then((response) => {
+						this.posts.next_page_url = response.data.next_page_url
+						for (let post in response.data.data) {
+							this.posts.data.push(response.data.data[post]);
+						}
+					})
+					.catch((error) => console.log(error))
+			},
+			showMoreFollowings() {
+				axios.get(this.user.paginateFollowings.next_page_url)
+					.then((response) => {
+						this.user.paginateFollowings.next_page_url = response.data.paginateFollowings.next_page_url
+						for (let following in response.data.paginateFollowings.data) {
+							this.user.paginateFollowings.data.push(response.data.paginateFollowings.data[following]);
+						}
+					})
+					.catch((error) => console.log(error))
+			},
+            showMoreFollowers() {
+				console.log(this.user.paginateFollowers.next_page_url)
+	            axios.get(this.user.paginateFollowers.next_page_url)
+		            .then((response) => {
+			            this.user.paginateFollowers.next_page_url = response.data.paginateFollowers.next_page_url
+			            for (let following in response.data.paginateFollowers.data) {
+				            this.user.paginateFollowers.data.push(response.data.paginateFollowers.data[following]);
+			            }
+		            })
+		            .catch((error) => console.log(error))
+			},
 			changeFollow(followtype) {
 				axios.post(`/api/user/${followtype}`, {
 					userId: this.user.id
@@ -138,10 +177,7 @@
 					.catch((error) => console.log(error))
 			},
 			resetView(type) {
-				for (let view in this.selected) {
-					this.selected[view] = false;
-					this.selected[type] = true
-				}
+				this.selected = type;
 			},
 			changeView(event) {
 				switch (event.target.getAttribute('data-type')) {

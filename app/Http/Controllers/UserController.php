@@ -28,11 +28,15 @@ class UserController extends Controller
             $user->countPosts = $user->posts->count();
             $user->countFollowings = $user->followings->count();
             $user->countFollowers = $user->followers->count();
+            $user->paginateFollowings = $user->followings()->paginate(10);
+            $user->paginateFollowers = $user->followers()->paginate(10);
         } else {
             $user = Auth::user();
             $user->countPosts = $user->posts->count();
             $user->countFollowings = $user->followings->count();
             $user->countFollowers = $user->followers->count();
+            $user->paginateFollowings = $user->followings()->paginate(10);
+            $user->paginateFollowers = $user->followers()->paginate(10);
         }
         return $user;
     }

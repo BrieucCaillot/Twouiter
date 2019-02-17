@@ -58,8 +58,17 @@
                             </form>
                         </div>
                     </div>
-                    <PostComponent v-for="post in allPosts" :key="post.id" :post="post" :user="post.user"
+                    <PostComponent v-if="allPosts.data.length > 0" v-for="post in allPosts.data" :key="post.id" :post="post" :user="post.user"
                                    :userIdConnected="user.id"></PostComponent>
+                    <div v-if="allPosts.data.length > 0 && allPosts.next_page_url !== null" class="columns mg-t2">
+                        <div class="column">
+                            <div class="level">
+                                <div class="level-item">
+                                    <button @click="showMorePosts()" class="button background-color-primary has-text-white">Show more</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,7 +88,9 @@
 			return {
 				message: '',
 				user: '',
-				allPosts: ''
+				allPosts: {
+					data: {}
+                }
 			}
 		},
 		methods: {
@@ -107,12 +118,19 @@
 			},
 			getPosts() {
 				axios.get('/api/allposts')
-					.then((response) => {
-						console.log(response);
-						this.allPosts = response.data
-					})
+					.then((response) => this.allPosts = response.data)
 					.catch((error) => console.log(error))
-			}
+			},
+            showMorePosts() {
+	            axios.get(this.allPosts.next_page_url)
+		            .then((response) => {
+			            this.allPosts.next_page_url = response.data.next_page_url
+			            for (let post in response.data.data) {
+			                this.allPosts.data.push(response.data.data[post]);
+                        }
+		            })
+		            .catch((error) => console.log(error))
+            }
 		},
 		beforeMount() {
 			this.getUser();
