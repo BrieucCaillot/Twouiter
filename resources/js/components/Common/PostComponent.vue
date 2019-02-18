@@ -36,8 +36,7 @@
 		methods: {
 			deleteTweet(event) {
 				axios.get(`/api/user/delete-post/${this.post.id}`)
-					.then((response) => console.log(response))
-                    .then(() => {
+                    .then((response) => {
 	                    event.target.parentNode.parentNode.parentNode.remove();
                     })
                     .catch((error) => console.log(error))

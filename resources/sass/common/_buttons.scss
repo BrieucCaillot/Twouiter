@@ -14,4 +14,9 @@
       color: #ffffff !important;
     }
   }
+  &.background-color-primary {
+    &:hover {
+      background-color: #0085d6;
+    }
+  }
 }

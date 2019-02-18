@@ -11331,10 +11331,6 @@ body {
   background-color: #1da1f2;
 }
 
-.background-color-primary:hover {
-  background-color: #0085d6;
-}
-
 .background-color-secondary,
 .user__posts,
 .user__profile {
@@ -11907,5 +11903,9 @@ img.preview {
 .button.background-color-white:hover {
   background-color: #0F71CC;
   color: #ffffff !important;
+}
+
+.button.background-color-primary:hover {
+  background-color: #0085d6;
 }
 

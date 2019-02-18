@@ -2047,8 +2047,6 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     deleteTweet: function deleteTweet(event) {
       axios.get("/api/user/delete-post/".concat(this.post.id)).then(function (response) {
-        return console.log(response);
-      }).then(function () {
         event.target.parentNode.parentNode.parentNode.remove();
       }).catch(function (error) {
         return console.log(error);
@@ -2156,8 +2154,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loaded: '',
       message: '',
-      user: '',
+      user: {
+        username: ''
+      },
       allPosts: {
         data: {}
       }
@@ -2215,7 +2216,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  beforeMount: function beforeMount() {
+  created: function created() {
     var _this5 = this;
 
     this.getUser();
@@ -2400,8 +2401,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      username: '',
       user: {
+        username: '',
         followers: '',
         followings: ''
       },
@@ -2471,10 +2472,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  beforeMount: function beforeMount() {
+  created: function created() {
     var url = window.location.href.split('/');
-    this.username = url.slice(url.length - 2, url.length - 1);
-    this.getUser(this.username);
+    this.user.username = url.slice(url.length - 2, url.length - 1);
+    this.getUser(this.user.username);
   }
 });
 
@@ -2575,6 +2576,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2586,15 +2603,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      username: '',
       user: {
+        username: '',
         followers: '',
         followings: '',
         paginateFollowings: '',
         paginateFollowers: ''
       },
       posts: '',
-      title: 'Latest tweets',
       followtext: '',
       selected: 'tweets'
     };
@@ -2662,7 +2678,6 @@ __webpack_require__.r(__webpack_exports__);
     showMoreFollowers: function showMoreFollowers() {
       var _this5 = this;
 
-      console.log(this.user.paginateFollowers.next_page_url);
       axios.get(this.user.paginateFollowers.next_page_url).then(function (response) {
         _this5.user.paginateFollowers.next_page_url = response.data.paginateFollowers.next_page_url;
 
@@ -2690,27 +2705,28 @@ __webpack_require__.r(__webpack_exports__);
     changeView: function changeView(event) {
       switch (event.target.getAttribute('data-type')) {
         case "tweets":
-          this.title = "Latest tweets";
+          location.hash = "tweets";
           this.resetView("tweets");
           break;
 
         case "followings":
-          this.title = "Followings";
+          location.hash = "followings";
           this.resetView("followings");
           break;
 
         case "followers":
-          this.title = "Followers";
+          location.hash = "followers";
           this.resetView("followers");
           break;
       }
     }
   },
-  beforeMount: function beforeMount() {
+  created: function created() {
     var url = window.location.href.split('/');
-    this.username = url.slice(url.length - 1);
-    this.getUser(this.username);
-    this.getPosts(this.username);
+    this.user.username = url.slice(url.length - 1);
+    location.hash ? this.selected = location.hash.split('#').pop() : this.selected = "tweets";
+    this.getUser(this.user.username);
+    this.getPosts(this.user.username);
   }
 });
 
@@ -3895,7 +3911,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "posts", attrs: { id: "content" } }, [
     _c("div", { staticClass: "container is-fluid" }, [
-      _vm.user
+      _vm.user.username.length > 0
         ? _c("div", { staticClass: "columns is-multiline" }, [
             _c(
               "div",
@@ -3954,8 +3970,14 @@ var render = function() {
                 _c("div", { staticClass: "columns is-flex-mobile" }, [
                   _c("div", { staticClass: "column" }, [
                     _c(
-                      "p",
-                      { staticClass: "user__profile__type has-text-centered" },
+                      "a",
+                      {
+                        staticClass:
+                          "user__profile__type has-text-centered is-block",
+                        attrs: {
+                          href: "/user/" + _vm.user.username + "/#tweets"
+                        }
+                      },
                       [_vm._v("Tweets")]
                     ),
                     _vm._v(" "),
@@ -3968,8 +3990,14 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "column" }, [
                     _c(
-                      "p",
-                      { staticClass: "user__profile__type has-text-centered" },
+                      "a",
+                      {
+                        staticClass:
+                          "user__profile__type has-text-centered is-block",
+                        attrs: {
+                          href: "/user/" + _vm.user.username + "/#followings"
+                        }
+                      },
                       [_vm._v("Followings")]
                     ),
                     _vm._v(" "),
@@ -3982,8 +4010,14 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "column" }, [
                     _c(
-                      "p",
-                      { staticClass: "user__profile__type has-text-centered" },
+                      "a",
+                      {
+                        staticClass:
+                          "user__profile__type has-text-centered is-block",
+                        attrs: {
+                          href: "/user/" + _vm.user.username + "/#followers"
+                        }
+                      },
                       [_vm._v("Followers")]
                     ),
                     _vm._v(" "),
@@ -4052,7 +4086,7 @@ var render = function() {
                             })
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "level" }, [
+                          _c("div", { staticClass: "level is-mobile" }, [
                             _c("div", { staticClass: "level-left" }, [
                               _vm._v(
                                 "\n                                    " +
@@ -4165,7 +4199,7 @@ var render = function() {
     "main",
     { staticClass: "user posts has-text-black", attrs: { id: "content" } },
     [
-      _vm.user
+      _vm.user.username.length > 0
         ? _c("div", { staticClass: "container is-fluid" }, [
             _c(
               "form",
@@ -4249,9 +4283,13 @@ var render = function() {
                     _c("div", { staticClass: "columns is-flex-mobile" }, [
                       _c("div", { staticClass: "column" }, [
                         _c(
-                          "p",
+                          "a",
                           {
-                            staticClass: "user__profile__type has-text-centered"
+                            staticClass:
+                              "user__profile__type has-text-centered is-block",
+                            attrs: {
+                              href: "/user/" + _vm.user.username + "/#tweets"
+                            }
                           },
                           [_vm._v("Tweets")]
                         ),
@@ -4268,9 +4306,14 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "column" }, [
                         _c(
-                          "p",
+                          "a",
                           {
-                            staticClass: "user__profile__type has-text-centered"
+                            staticClass:
+                              "user__profile__type has-text-centered is-block",
+                            attrs: {
+                              href:
+                                "/user/" + _vm.user.username + "/#followings"
+                            }
                           },
                           [_vm._v("Followings")]
                         ),
@@ -4287,9 +4330,13 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "column" }, [
                         _c(
-                          "p",
+                          "a",
                           {
-                            staticClass: "user__profile__type has-text-centered"
+                            staticClass:
+                              "user__profile__type has-text-centered is-block",
+                            attrs: {
+                              href: "/user/" + _vm.user.username + "/#followers"
+                            }
                           },
                           [_vm._v("Followers")]
                         ),
@@ -4738,7 +4785,7 @@ var render = function() {
     "main",
     { staticClass: "user posts has-text-black", attrs: { id: "content" } },
     [
-      _vm.user
+      _vm.user.username.length > 0
         ? _c("div", { staticClass: "container is-fluid" }, [
             _c("div", { staticClass: "columns is-multiline" }, [
               _c(
@@ -4803,7 +4850,8 @@ var render = function() {
                                 staticClass:
                                   "button background-color-primary has-text-white mauto",
                                 attrs: {
-                                  href: "/user/" + _vm.username + "/profile"
+                                  href:
+                                    "/user/" + _vm.user.username + "/profile"
                                 }
                               },
                               [
@@ -4860,10 +4908,10 @@ var render = function() {
                   _c("div", { staticClass: "columns is-flex-mobile" }, [
                     _c("div", { staticClass: "column" }, [
                       _c(
-                        "p",
+                        "a",
                         {
                           staticClass:
-                            "user__profile__type has-text-centered c-pointer",
+                            "user__profile__type has-text-centered is-block",
                           attrs: { "data-type": "tweets" },
                           on: {
                             click: function($event) {
@@ -4885,10 +4933,10 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "column" }, [
                       _c(
-                        "p",
+                        "a",
                         {
                           staticClass:
-                            "user__profile__type has-text-centered c-pointer",
+                            "user__profile__type has-text-centered is-block",
                           attrs: { "data-type": "followings" },
                           on: {
                             click: function($event) {
@@ -4910,10 +4958,10 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "column" }, [
                       _c(
-                        "p",
+                        "a",
                         {
                           staticClass:
-                            "user__profile__type has-text-centered c-pointer",
+                            "user__profile__type has-text-centered is-block",
                           attrs: { "data-type": "followers" },
                           on: {
                             click: function($event) {
@@ -4944,11 +4992,25 @@ var render = function() {
                     _c("div", { staticClass: "column pd0" }, [
                       _c("div", { staticClass: "level" }, [
                         _c("div", { staticClass: "level-left" }, [
-                          _c(
-                            "h1",
-                            { staticClass: "color-secondary is-size-4" },
-                            [_vm._v(_vm._s(_vm.title))]
-                          )
+                          _vm.selected == "tweets"
+                            ? _c(
+                                "h1",
+                                { staticClass: "color-secondary is-size-4" },
+                                [_vm._v("Latests tweets")]
+                              )
+                            : _vm.selected == "followings"
+                            ? _c(
+                                "h1",
+                                { staticClass: "color-secondary is-size-4" },
+                                [_vm._v("Followings")]
+                              )
+                            : _vm.selected == "followers"
+                            ? _c(
+                                "h1",
+                                { staticClass: "color-secondary is-size-4" },
+                                [_vm._v("Followers")]
+                              )
+                            : _vm._e()
                         ])
                       ])
                     ])
@@ -5004,7 +5066,11 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [_vm._v("Show more")]
+                                [
+                                  _vm._v(
+                                    "Show more\n                                "
+                                  )
+                                ]
                               )
                             : _vm.user.paginateFollowings.next_page_url !==
                                 null && _vm.selected == "followings"
@@ -5019,7 +5085,11 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [_vm._v("Show more")]
+                                [
+                                  _vm._v(
+                                    "Show more\n                                "
+                                  )
+                                ]
                               )
                             : _vm.user.paginateFollowers.next_page_url !==
                                 null && _vm.selected == "followers"
@@ -5034,7 +5104,11 @@ var render = function() {
                                     }
                                   }
                                 },
-                                [_vm._v("Show more")]
+                                [
+                                  _vm._v(
+                                    "Show more\n                                "
+                                  )
+                                ]
                               )
                             : _vm._e()
                         ])

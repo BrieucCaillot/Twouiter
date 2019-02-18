@@ -1,6 +1,6 @@
 <template>
     <main id="content" class="user posts has-text-black">
-        <div v-if="user" class="container is-fluid">
+        <div v-if="user.username.length > 0" class="container is-fluid">
             <div class="columns is-multiline">
                 <div class="column user__profile shadow full-h is-3 is-12-touch">
                     <div v-if="user.image" class="columns mg-t1">
@@ -19,8 +19,9 @@
                                 <span class="mauto has-text-center user__profile__username">@{{ user.username }}</span>
                             </div>
                             <div class="level is-mobile">
-                                <a :href="`/user/${username}/profile`" class="button background-color-primary has-text-white mauto"
-                                        v-if="userIdConnected == user.id">Edit Profile
+                                <a :href="`/user/${user.username}/profile`"
+                                   class="button background-color-primary has-text-white mauto"
+                                   v-if="userIdConnected == user.id">Edit Profile
                                 </a>
                                 <button @click="changeFollow('follow')" class="button is-success has-text-white mauto"
                                         v-else-if="isFollowable">{{ followtext }}
@@ -34,15 +35,18 @@
                     <hr>
                     <div class="columns is-flex-mobile">
                         <div class="column">
-                            <p @click="changeView($event)" data-type="tweets" class="user__profile__type has-text-centered c-pointer">Tweets</p>
+                            <a @click="changeView($event)" data-type="tweets"
+                               class="user__profile__type has-text-centered is-block">Tweets</a>
                             <p class="user__profile__count has-text-centered">{{ user.countPosts }}</p>
                         </div>
                         <div class="column">
-                            <p @click="changeView($event)" data-type="followings" class="user__profile__type has-text-centered c-pointer">Followings</p>
+                            <a @click="changeView($event)" data-type="followings"
+                               class="user__profile__type has-text-centered is-block">Followings</a>
                             <p class="user__profile__count has-text-centered">{{ user.countFollowings }}</p>
                         </div>
                         <div class="column">
-                            <p @click="changeView($event)" data-type="followers" class="user__profile__type has-text-centered c-pointer">Followers</p>
+                            <a @click="changeView($event)" data-type="followers"
+                               class="user__profile__type has-text-centered is-block">Followers</a>
                             <p class="user__profile__count has-text-centered">{{ user.countFollowers }}</p>
                         </div>
                     </div>
@@ -52,12 +56,15 @@
                         <div class="column pd0">
                             <div class="level">
                                 <div class="level-left">
-                                    <h1 class="color-secondary is-size-4">{{ title }}</h1>
+                                    <h1 v-if="selected == 'tweets'" class="color-secondary is-size-4">Latests tweets</h1>
+                                    <h1 v-else-if="selected == 'followings'" class="color-secondary is-size-4">Followings</h1>
+                                    <h1 v-else-if="selected == 'followers'" class="color-secondary is-size-4">Followers</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <PostComponent v-if="selected == 'tweets' && posts.data.length > 0" v-for="post in posts.data" :key="post.id"
+                    <PostComponent v-if="selected == 'tweets' && posts.data.length > 0" v-for="post in posts.data"
+                                   :key="post.id"
                                    :post="post" :user="post.user" :userIdConnected="userIdConnected"></PostComponent>
                     <FollowComponent v-if="selected == 'followings' && user.paginateFollowings.data.length > 0"
                                      v-for="following in user.paginateFollowings.data" :key="following.id"
@@ -69,9 +76,18 @@
                         <div class="column">
                             <div class="level">
                                 <div class="level-item">
-                                    <button v-if="posts.next_page_url !== null && selected == 'tweets'" @click="showMorePosts()" class="button background-color-primary has-text-white">Show more</button>
-                                    <button v-else-if="user.paginateFollowings.next_page_url !== null && selected == 'followings'" @click="showMoreFollowings()" class="button background-color-primary has-text-white">Show more</button>
-                                    <button v-else-if="user.paginateFollowers.next_page_url !== null && selected == 'followers'" @click="showMoreFollowers()" class="button background-color-primary has-text-white">Show more</button>
+                                    <button v-if="posts.next_page_url !== null && selected == 'tweets'"
+                                            @click="showMorePosts()"
+                                            class="button background-color-primary has-text-white">Show more
+                                    </button>
+                                    <button v-else-if="user.paginateFollowings.next_page_url !== null && selected == 'followings'"
+                                            @click="showMoreFollowings()"
+                                            class="button background-color-primary has-text-white">Show more
+                                    </button>
+                                    <button v-else-if="user.paginateFollowers.next_page_url !== null && selected == 'followers'"
+                                            @click="showMoreFollowers()"
+                                            class="button background-color-primary has-text-white">Show more
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -96,17 +112,16 @@
 		},
 		data() {
 			return {
-				username: '',
 				user: {
+					username: '',
 					followers: '',
 					followings: '',
 					paginateFollowings: '',
 					paginateFollowers: ''
 				},
 				posts: '',
-				title: 'Latest tweets',
 				followtext: '',
-                selected: 'tweets'
+				selected: 'tweets'
 			}
 		},
 		computed: {
@@ -159,7 +174,6 @@
 					.catch((error) => console.log(error))
 			},
             showMoreFollowers() {
-				console.log(this.user.paginateFollowers.next_page_url)
 	            axios.get(this.user.paginateFollowers.next_page_url)
 		            .then((response) => {
 			            this.user.paginateFollowers.next_page_url = response.data.paginateFollowers.next_page_url
@@ -182,25 +196,26 @@
 			changeView(event) {
 				switch (event.target.getAttribute('data-type')) {
 					case "tweets":
-						this.title = "Latest tweets";
+						location.hash = "tweets";
 						this.resetView("tweets");
 						break;
 					case "followings":
-						this.title = "Followings";
+						location.hash = "followings";
 						this.resetView("followings");
 						break;
 					case "followers":
-						this.title = "Followers";
+						location.hash = "followers"
 						this.resetView("followers");
 						break;
 				}
 			}
 		},
-		beforeMount() {
+		created() {
 			let url = window.location.href.split('/');
-			this.username = url.slice(url.length - 1);
-			this.getUser(this.username);
-			this.getPosts(this.username);
+			this.user.username = url.slice(url.length - 1);
+            (location.hash) ? this.selected = location.hash.split('#').pop() : this.selected = "tweets"
+			this.getUser(this.user.username);
+			this.getPosts(this.user.username);
 		}
 	}
 </script>

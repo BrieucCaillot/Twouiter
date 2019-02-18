@@ -1,6 +1,6 @@
 <template>
     <main id="content" class="user posts has-text-black">
-        <div v-if="user" class="container is-fluid">
+        <div v-if="user.username.length > 0" class="container is-fluid">
             <form @submit.prevent="updateUser(user.username)" enctype="multipart/form-data"
                   class="columns is-multiline">
                 <div class="column user__profile shadow full-h is-3 is-12-touch">
@@ -29,15 +29,15 @@
                     <hr>
                     <div class="columns is-flex-mobile">
                         <div class="column">
-                            <p class="user__profile__type has-text-centered">Tweets</p>
+                            <a :href="`/user/${user.username}/#tweets`" class="user__profile__type has-text-centered is-block">Tweets</a>
                             <p class="user__profile__count has-text-centered">{{ user.countPosts }}</p>
                         </div>
                         <div class="column">
-                            <p class="user__profile__type has-text-centered">Followings</p>
+                            <a :href="`/user/${user.username}/#followings`" class="user__profile__type has-text-centered is-block">Followings</a>
                             <p class="user__profile__count has-text-centered">{{ user.countFollowings }}</p>
                         </div>
                         <div class="column">
-                            <p class="user__profile__type has-text-centered">Followers</p>
+                            <a :href="`/user/${user.username}/#followers`" class="user__profile__type has-text-centered is-block">Followers</a>
                             <p class="user__profile__count has-text-centered">{{ user.countFollowers }}</p>
                         </div>
                     </div>
@@ -162,8 +162,8 @@
 		},
 		data() {
 			return {
-				username: '',
 				user: {
+    				username: '',
 					followers: '',
 					followings: '',
 				},
@@ -221,10 +221,10 @@
 					})
 			}
 		},
-		beforeMount() {
+		created() {
 			let url = window.location.href.split('/');
-			this.username = url.slice(url.length - 2, url.length - 1);
-			this.getUser(this.username);
+			this.user.username = url.slice(url.length - 2, url.length - 1);
+			this.getUser(this.user.username);
 		}
 	}
 </script>
