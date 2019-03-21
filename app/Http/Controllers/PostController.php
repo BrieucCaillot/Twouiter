@@ -84,8 +84,14 @@ class PostController extends Controller
      * @param $postId
      * @return mixed
      */
-    public function deletePost($postId) {
-        $post = Post::where('id', $postId)->delete();
-        return $post;
+    public function deletePost($postId)
+    {
+        $post = Post::where('id', $postId)->first();
+
+        if (Auth::user()->id != $post->user_id) {
+            return abort(404, "You are not allowed to execute the following action");
+        }
+
+        $post->delete();
     }
 }

@@ -34,30 +34,32 @@ class ProfileController extends Controller
 
             $request->validate([
                 'name' => ['required', 'string', 'max:25'],
-                'username' => ['required', 'string', 'max:18', 'unique:users,username,'.$user->id],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
-                'password' => ['required', 'string', 'min:6', 'confirmed']
+                'username' => ['required', 'string', 'max:18', 'unique:users,username,' . $user->id],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             ]);
 
-            if (Hash::check($request->oldpassword, $user->password)) {
-                $user->name = $request->name;
-                $user->username = $request->username;
-                $user->email = $request->email;
-                $user->password = bcrypt($request->password);
-
-                if (isset($request->image)) {
-                    $avatarName = $user->id . '_' . time() . '.' . request()->image->getClientOriginalExtension();
-                    $resize = Image::make($request->file('image'))->fit(300)->encode('jpg');
-                    Storage::put('avatars/' . $avatarName, $resize);
-                    $user->image = $avatarName;
-                }
-
+            if (isset($request->image)) {
+                $avatarName = $user->id . '_' . time() . '.' . request()->image->getClientOriginalExtension();
+                $resize = Image::make($request->file('image'))->fit(300)->encode('jpg');
+                Storage::put('avatars/' . $avatarName, $resize);
+                $user->image = $avatarName;
                 $user->save();
-
-                return "Profile updated";
-            } else {
-                return response()->json(['errors' => ['password' => ["Your current password isn't valid"]]], 422);
             }
+
+            if (isset($request->password)) {
+                if (Hash::check($request->oldpassword, $user->password)) {
+                    $user->name = $request->name;
+                    $user->username = $request->username;
+                    $user->email = $request->email;
+                    $user->password = bcrypt($request->password);
+                    $user->save();
+                } else {
+                    return response()->json(['errors' => ['password' => ["Your current password isn't valid"]]], 422);
+                }
+            }
+
+            return "Profile updated";
+
         }
     }
 }

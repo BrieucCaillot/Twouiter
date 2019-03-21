@@ -27,6 +27,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $appends = ['avatarUrl'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -48,5 +50,12 @@ class User extends Authenticatable
     public function followings()
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id')->withTimestamps();
+    }
+
+    public function getAvatarUrlAttribute() {
+        if (!$this->image) {
+            return '/images/egg_placeholder.png';
+        }
+        return "/storage/avatars/{$this->image}";
     }
 }

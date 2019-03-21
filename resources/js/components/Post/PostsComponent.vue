@@ -3,10 +3,10 @@
         <div class="container is-fluid">
             <div v-if="user.username.length > 0" class="columns is-multiline">
                 <div class="column user__profile shadow full-h is-3 is-12-touch">
-                    <div v-if="user.image" class="columns mg-t1">
+                    <div class="columns mg-t1">
                         <div class="column user__profile__top">
                             <div class="user__profile__top__img"
-                                 :style="`background: url(/storage/avatars/${user.image}) no-repeat center center / cover`"></div>
+                                 :style="`background: url(${user.avatarUrl}) no-repeat center center / cover`"></div>
                         </div>
                     </div>
                     <div class="columns is-vcentered">
@@ -146,7 +146,3 @@
 		}
 	}
 </script>
-
-<style scoped>
-
-</style>

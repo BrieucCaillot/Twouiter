@@ -8,8 +8,8 @@
                         <div class="column user__profile__top">
                             <div v-if="imageData" class="user__profile__top__img"
                                  :style=" `background: url(${imageData}) no-repeat center center / cover`"></div>
-                            <div v-else-if="user.image" class="user__profile__top__img"
-                                 :style=" `background: url('/storage/avatars/${user.image}') no-repeat center center / cover`"></div>
+                            <div v-else-if="user.avatarUrl" class="user__profile__top__img"
+                                 :style=" `background: url(${user.avatarUrl}) no-repeat center center / cover`"></div>
                         </div>
                     </div>
                     <div class="columns is-vcentered">
