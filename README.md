@@ -1,6 +1,6 @@
-# Laravel Twitter
+# Twouiter
 
-🐦 Twitter like application with Laravel 
+🐦 Twitter like application made with Laravel & Vuejs
 
 ![Language](https://img.shields.io/badge/Language-Laravel-orange.svg)  ![Language](https://img.shields.io/badge/Language-Vuejs-green.svg) ![Language](https://img.shields.io/badge/Language-mysql-blue.svg) ![Language](https://img.shields.io/badge/Language-Blade-e44b23.svg) ![Language](https://img.shields.io/badge/Framework-SCSS-pink.svg) ![Language](https://img.shields.io/badge/Framework-Bulma-green.svg)
 
@@ -11,7 +11,7 @@
  
 ```shell
 # Go to directory
-cd laravel-twitter
+cd twouiter
 
 # Install composer dependencies
 composer install
